@@ -1,0 +1,87 @@
+{
+  "course": "DevOps",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Introduction",
+      "topics": [
+        { "name": "Course Introduction", "key_concepts": ["Course objectives", "Grading criteria", "Project requirements"] },
+        { "name": "The Legacy Project", "key_concepts": ["Inherited codebases", "Technical debt", "Troubleshooting"] }
+      ]
+    },
+    {
+      "lesson": 2,
+      "title": "Conventions, OpenAPI, DotEnv",
+      "topics": [
+        { "name": "Conventions", "key_concepts": ["Naming standards", "Code organization", "Best practices"] },
+        { "name": "OpenAPI", "key_concepts": ["API documentation", "Swagger", "API specification"] },
+        { "name": "Monolith/Monorepo/Multirepo", "key_concepts": ["Architecture patterns", "Repository organization", "Trade-offs"] },
+        { "name": "Environment Variables", "key_concepts": [".env files", "Configuration management", "Secrets handling"] }
+      ]
+    },
+    {
+      "lesson": 3,
+      "title": "GitHub Actions, Cloud, Azure, Deploy",
+      "topics": [
+        { "name": "GitHub Actions", "key_concepts": ["Workflow automation", "CI/CD pipelines", "YAML configuration"] },
+        { "name": "GitHub Issues Workflow", "key_concepts": ["Issue tracking", "Project management", "Kanban"] },
+        { "name": "GitHub Secrets", "key_concepts": ["Secure storage", "Environment variables", "Credential management"] },
+        { "name": "Azure", "key_concepts": ["Cloud infrastructure", "Virtual machines", "Resource groups"] },
+        { "name": "SSH", "key_concepts": ["Secure access", "Key management", "Remote management"] },
+        { "name": "Running in Production", "key_concepts": ["Deployment strategies", "Monitoring", "Logging"] }
+      ]
+    },
+    {
+      "lesson": 4,
+      "title": "Software Quality, Linting, CI",
+      "topics": [
+        { "name": "Software Quality", "key_concepts": ["Technical debt", "Code smells", "Quality metrics"] },
+        { "name": "CI/CD/CD", "key_concepts": ["Continuous Integration", "Continuous Delivery", "Continuous Deployment"] },
+        { "name": "Linting", "key_concepts": ["Static code analysis", "Code style", "Enforcement tools"] },
+        { "name": "Branching Strategies", "key_concepts": ["Feature branching", "Trunk-based", "GitFlow", "GitHub Flow"] },
+        { "name": "Cron", "key_concepts": ["Scheduled tasks", "Background jobs", "Automation"] }
+      ]
+    },
+    {
+      "lesson": 5,
+      "title": "Docker, The Simulation",
+      "topics": [
+        { "name": "Build Tools", "key_concepts": ["Package managers", "Dependency resolution", "Build pipelines"] },
+        { "name": "Packaging", "key_concepts": ["Software distribution", "Artifacts", "Versioning"] },
+        { "name": "Virtualization/Containerization", "key_concepts": ["Isolation", "Resource management", "Hypervisors"] },
+        { "name": "Docker", "key_concepts": ["Containers", "Images", "Volumes", "Networking"] },
+        { "name": "Dockerfile", "key_concepts": ["Image definition", "Layers", "Optimization"] }
+      ]
+    },
+    {
+      "lesson": 6,
+      "title": "Docker-compose, Continuous Delivery, DevOps",
+      "topics": [
+        { "name": "Docker-compose", "key_concepts": ["Multi-container apps", "Service definition", "Network configuration"] },
+        { "name": "Hot Reload in Docker", "key_concepts": ["Development experience", "Volume mounts", "Code reloading"] },
+        { "name": "Debug docker-compose", "key_concepts": ["Troubleshooting", "Logging", "Network inspection"] },
+        { "name": "Agile", "key_concepts": ["Agile manifesto", "Iterative development", "Continuous improvement"] },
+        { "name": "DevOps", "key_concepts": ["Culture", "Collaboration", "Automation", "CALMS framework"] },
+        { "name": "Continuous Delivery", "key_concepts": ["Artifact generation", "Registry publishing", "Release automation"] }
+      ]
+    },
+    {
+      "lesson": 7,
+      "title": "Guest Lecture",
+      "topics": [
+        { "name": "DevOps in Practice", "key_concepts": ["Industry experience", "Real-world challenges", "Best practices"] }
+      ]
+    },
+    {
+      "lesson": 8,
+      "title": "Continuous Deployment",
+      "topics": [
+        { "name": "DevOps Principles", "key_concepts": ["End-to-End Responsibility", "Flow", "Feedback"] },
+        { "name": "DevOps is People", "key_concepts": ["Culture", "Psychological safety", "Learning organization"] },
+        { "name": "Postmortem", "key_concepts": ["Blameless culture", "Incident analysis", "Improvement opportunities"] },
+        { "name": "Continuous Deployment", "key_concepts": ["Automated releases", "Rollback strategies", "Quality gates"] },
+        { "name": "Reverse Proxies", "key_concepts": ["Nginx", "Traffic routing", "Load balancing"] }
+      ]
+    }
+  ]
+}

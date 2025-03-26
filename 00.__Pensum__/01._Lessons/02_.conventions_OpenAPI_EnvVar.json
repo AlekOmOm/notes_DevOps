@@ -1,0 +1,18 @@
+{
+  "lesson_number": 2,
+  "title": "Conventions, OpenAPI, DotEnv",
+  "key_concepts": [
+    {
+      "topic": "Conventions",
+      "concepts": ["naming_standards", "code_organization", "best_practices"]
+    },
+    {
+      "topic": "OpenAPI",
+      "concepts": ["api_documentation", "swagger", "api_specification"]
+    },
+    {
+      "topic": "Environment Variables",
+      "concepts": ["dotenv_files", "configuration_management", "secrets_handling"]
+    }
+  ]
+}

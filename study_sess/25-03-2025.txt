@@ -1,0 +1,11 @@
+(devops) Pensum: create Roadmap.json for each lesson
+- note all topics in topics.devops.json
+- create Topic JSON structure
+- fill topic (slides, notes, AI)
+- add topics to lesson in Roadmap.DevOps.json
+(devops) whoknows: Map current progress
+- whoknows project checklist of topics
+(devops) whoknows: create Roadmap.WhoKnows.json
+- add topics to lessons 
+- add lessons to Roadmap.WhoKnows.json
+

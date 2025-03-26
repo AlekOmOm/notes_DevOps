@@ -1,0 +1,16 @@
+{
+  "name": "<concept_name>",
+  "learnings": {
+    "def": "x",
+    "explanation": [
+      "dsad",
+      "dsadsa"
+    ],
+    "examples": [
+      {
+        "context": "<context>",
+        "code": "<example fx. JavaScript RestAPIs>"
+      }
+    ]
+  }
+}

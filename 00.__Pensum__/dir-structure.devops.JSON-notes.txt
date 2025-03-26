@@ -1,0 +1,17 @@
+00.__Pensum__/
+├── 00._JSON.templates/
+│   ├── template.COURSE.json
+│   ├── template.LESSON.json
+│   └── template.CONCEPT.json
+├── 01._Lessons/
+│   ├── 02_.Conventions_OpenAPI_EnvVar/
+│   │   ├── 02_.Conventions_OpenAPI_EnvVar.json
+│   │   ├── Conventions/
+│   │   │   ├── naming_standards/
+│   │   │   │   ├── naming_standards.json
+│   │   │   │   └── rust_naming_standards.json
+│   │   │   └── code_organization/
+│   │   ├── OpenAPI/
+│   │   └── Environment_Variables/
+│   └── 03_...
+└── devops.lessons.topics.concepts.json

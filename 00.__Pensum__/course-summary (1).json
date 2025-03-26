@@ -1,0 +1,590 @@
+{
+  "course": "DevOps",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Introduction and The Legacy Project",
+      "topics": [
+        {
+          "name": "Course Introduction",
+          "key_concepts": [
+            "Comprehensive overview of the course structure, including weekly assignments, grading criteria, and learning objectives that focus on practical DevOps implementation",
+            "Introduction to core DevOps principles such as continuous improvement, collaboration, and shared responsibility that will guide students throughout the semester",
+            "Explanation of the course repository organization on GitHub and how Teams will be used for communication and submission of assignments",
+            "Discussion of the course motivation, highlighting how DevOps skills prepare students for internships and professional careers by mirroring real-world practices",
+            "Introduction to the weekly DevOps principle approach, where each week focuses on a specific aspect of DevOps culture and implementation"
+          ]
+        },
+        {
+          "name": "The Legacy Project",
+          "key_concepts": [
+            "Immersive introduction to the '¿Who Knows?' legacy search engine from 2009, presenting students with a realistic scenario of inheriting outdated code",
+            "Hands-on exploration of source code archaeology techniques used to recover and understand abandoned codebases in professional environments",
+            "Detailed walkthrough of connecting to remote servers using SSH, including authentication methods, command execution, and security considerations",
+            "Comprehensive coverage of server investigation tools including 'ps' for process examination, 'lsof' for listing open files and ports, and 'netstat' for network connection analysis",
+            "Step-by-step guidance on using Secure Copy Protocol (SCP) to retrieve code and database files from remote servers, simulating real-world code recovery scenarios",
+            "Practical experience with troubleshooting server applications, identifying running services, and understanding port configurations",
+            "Analysis of the legacy application architecture, including the Python backend, frontend, and SQLite database containing scraped Wikipedia articles",
+            "Critical examination of outdated technology choices and their implications for maintenance, security, and future development"
+          ]
+        },
+        {
+          "name": "Legacy Code Remediation",
+          "key_concepts": [
+            "Systematic approach to refactoring Python 2 code to Python 3, addressing syntax changes, library compatibility issues, and deprecated features",
+            "Creation of comprehensive dependency graphs to visualize and manage complex software relationships using tools like 'debtree' and 'pipdeptree'",
+            "Detailed examination of the SQLite database structure, data models, and query patterns used in the legacy application",
+            "Implementation of version control best practices with Git, including proper repository setup, meaningful commit messages, and branching strategies",
+            "Step-by-step process for creating GitHub releases to document significant changes, tag versions, and provide release notes",
+            "Analysis of code organization patterns in the legacy project, identifying structural issues and opportunities for improvement",
+            "Introduction to build automation using Makefiles to simplify complex command sequences and standardize development workflows",
+            "Assessment of security vulnerabilities common in legacy code and strategies for addressing them during modernization",
+            "Practical experience with the incremental modernization approach, emphasizing the importance of maintaining functionality while improving code quality"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 2,
+      "title": "Conventions, OpenAPI, DotEnv",
+      "topics": [
+        {
+          "name": "Version Control Practices",
+          "key_concepts": [
+            "Detailed examination of which files should never be pushed to repositories, including IDE configurations (.idea, .vscode), OS-specific files (.DS_Store, Thumbs.db), and build artifacts (__pycache__, node_modules)",
+            "Configuration of both project-specific and global .gitignore files to systematically exclude unnecessary files across all projects, with platform-specific instructions for Windows, macOS, and Linux",
+            "Structured approach to commit message formatting using the '<past_tense_verb> + <action>' pattern to enhance clarity, traceability, and team communication",
+            "Comprehensive introduction to gitignore.io as a tool for generating comprehensive .gitignore templates tailored to specific technologies and environments",
+            "Analysis of commit activity visualization techniques to monitor team productivity, identify patterns, and ensure consistent contribution across project timelines",
+            "Discussion of the importance of commit messages in facilitating code reviews, troubleshooting, documentation, and maintaining professional standards"
+          ]
+        },
+        {
+          "name": "Naming Conventions",
+          "key_concepts": [
+            "Exhaustive comparison of case styles including camelCase (JavaScript variables/functions), PascalCase (classes/components), snake_case (Python, databases), kebab-case (CSS, URLs), and UPPER_SNAKE_CASE (constants, environment variables)",
+            "Language-specific convention guidelines for Python, JavaScript, Java, and CSS to ensure consistency within codebases and align with community standards",
+            "Detailed database naming best practices covering tables (plural nouns), columns (descriptive, snake_case), relationships, and indexes to improve schema clarity and query readability",
+            "Framework-specific naming patterns for web components, API endpoints, and configuration files that align with ecosystem expectations",
+            "Comprehensive chart of naming conventions across different programming contexts with concrete examples to demonstrate correct implementation",
+            "Process for establishing team-specific style guides and convention documents to standardize practices across development groups",
+            "Discussion of the cognitive and maintenance benefits of consistent naming conventions, including reduced cognitive load and improved code quality"
+          ]
+        },
+        {
+          "name": "OpenAPI",
+          "key_concepts": [
+            "Comprehensive introduction to the OpenAPI specification as an industry standard for describing REST APIs in a language-agnostic format",
+            "Historical context of OpenAPI's evolution from Swagger, including the transition from version 3.0 to 3.1.0 and the incorporation of JSON schema",
+            "Detailed walkthrough of converting between JSON and YAML formats within OpenAPI specifications, with emphasis on readability and maintenance advantages",
+            "Step-by-step guide for importing OpenAPI specifications into Postman to facilitate API testing, documentation, and client generation",
+            "Hands-on exploration of the Swagger Editor for creating, validating, and visualizing API specifications in real-time",
+            "Analysis of the bidirectional relationship between APIs and OpenAPI: generating specifications from existing APIs and generating code from specifications",
+            "Practical application of OpenAPI concepts to the class project, generating a specification for the 'whoknows' API",
+            "Examination of OpenAPI's role in API-first development approaches and its importance in modern software development workflows",
+            "Overview of alternative ways to render Swagger UI, including Docker containers and static HTML implementations"
+          ]
+        },
+        {
+          "name": "Monolith/Monorepo/Multirepo",
+          "key_concepts": [
+            "Detailed comparison of monolithic versus microservice architectural patterns, examining their impact on deployment, scaling, and team organization",
+            "Comprehensive analysis of repository organization strategies (monorepo vs. multirepo), including real-world examples from Google, Stack Overflow, and other major tech companies",
+            "In-depth examination of monorepo advantages including code sharing, atomic commits across projects, simplified dependency management, and consistent tooling",
+            "Critical discussion of monorepo disadvantages including slower checkouts, increased build complexity, permission challenges, and tooling limitations",
+            "Clarification of common misconceptions, particularly the distinction between monolithic applications and monorepo organizational strategies",
+            "Evaluation of repository strategies based on project size, team structure, organizational culture, and technological ecosystem",
+            "Examination of specific implementation challenges for each approach, including build systems, access control, and version management",
+            "Research insights from Google's monorepo practices, highlighting improvements in code quality and reusability despite the massive scale",
+            "Guidance on selecting the appropriate repository strategy based on project requirements, team structure, and organizational goals"
+          ]
+        },
+        {
+          "name": "Environment Variables",
+          "key_concepts": [
+            "Comprehensive explanation of environment variable hierarchy across five levels: OS, User, Shell, Process, and Runtime, detailing how variables cascade and override through the system",
+            "Detailed comparison of configuration approaches, weighing the security and operational trade-offs between environment variables and configuration files",
+            "Practical implementation of Python's dotenv library with both direct (os.getenv) and object-based (dotenv_values) access patterns, including virtual environment setup",
+            "Template creation strategies for sharing environment structures (.env.example, .env.template) while protecting sensitive data through proper .gitignore configuration",
+            "Advanced GitHub Actions implementation for secure environment variable management, comparing manual setup versus marketplace extensions like SpicyPizza/create-envfile",
+            "Docker-compose environment configuration techniques, including inline definition, file references, and secret management for containerized applications",
+            "Cross-language environment variable handling patterns, comparing Node.js, Python, and other common runtime environments",
+            "Security considerations for environment variables in production environments, including scope limitation, encryption, and access control",
+            "Best practices for environment separation (development, testing, staging, production) to ensure consistent application behavior across deployment contexts"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 3,
+      "title": "GitHub Actions, Cloud, Azure, Deploy",
+      "topics": [
+        {
+          "name": "GitHub Actions",
+          "key_concepts": [
+            "Comprehensive introduction to GitHub Actions as a CI/CD platform integrated directly into GitHub repositories, distinguishing between Git version control and GitHub platform features",
+            "Detailed explanation of core GitHub Actions terminology: workflows (automation definitions), events (triggers like push or pull request), jobs (parallel execution units), steps (sequential commands), and runners (compute environments)",
+            "Step-by-step walkthrough of creating YAML workflow files in the .github/workflows directory, with emphasis on proper indentation and syntax requirements",
+            "Practical implementation of a Hello World workflow demonstrating the basic structure with checkout actions, shell commands, and workflow dispatching",
+            "Comparison of GitHub Actions with alternative CI/CD platforms including BitBucket Bamboo, GitLab CI/CD, Jenkins, and others, evaluating their features and limitations",
+            "Hands-on experience with the GitHub CLI (gh) for repository management, workflow execution, and automation from the command line",
+            "Examination of GitHub Actions Marketplace for discovering pre-built actions, community resources, and templates to accelerate workflow development",
+            "Analysis of GitHub Actions execution contexts, which provide access to environment information, repository metadata, and event payload data",
+            "Discussion of GitHub Actions limitations, including free tier constraints, execution speed considerations, and security implications"
+          ]
+        },
+        {
+          "name": "GitHub Issues Workflow",
+          "key_concepts": [
+            "Detailed implementation of automated issue management using GitHub Actions, creating workflows triggered by issue creation, updates, and comments",
+            "Practical walkthrough of auto-commenting on new issues to provide standardized responses, setup instructions, or team-specific information",
+            "In-depth exploration of GitHub context objects to access issue metadata, repository information, and event details within workflows",
+            "Context debugging techniques using toJson() to examine available data structures and identify relevant properties for automation",
+            "Step-by-step guide to using peter-evans/create-or-update-comment action for consistent and formatted issue responses with Markdown support",
+            "Advanced GitHub API integration using gh cli commands within workflows for complex issue manipulation beyond pre-built actions",
+            "Comparison of declarative (using marketplace actions) versus imperative (using GitHub API) approaches to issue automation",
+            "Implementation of conditional workflow logic based on issue labels, content, or assignees to provide customized responses",
+            "Discussion of issue automation's role in standardizing team processes, reducing manual overhead, and improving project management efficiency"
+          ]
+        },
+        {
+          "name": "GitHub Secrets",
+          "key_concepts": [
+            "Comprehensive overview of GitHub's secret storage system for secure credential management within repositories and organizations",
+            "Step-by-step configuration of repository secrets through both the GitHub UI and GitHub CLI, demonstrating the complete lifecycle from creation to usage",
+            "Detailed explanation of security measures GitHub implements, including encryption, access limitations, and masking secrets in logs to prevent accidental exposure",
+            "Practical examples of referencing secrets in workflow files using the ${{ secrets.SECRET_NAME }} syntax, with emphasis on proper scoping and context",
+            "Implementation patterns for common secret types including API keys, deployment credentials, database connections, and service authentication tokens",
+            "Comparison of repository-level versus organization-level secrets, with guidance on when each approach is most appropriate",
+            "Best practices for secret rotation, auditing, and management to maintain security over time while minimizing disruption to workflows",
+            "Discussion of alternative approaches for managing sensitive information, including environment variables, configuration files, and dedicated secret management services",
+            "Security considerations when using secrets with third-party actions, including permission models and potential exfiltration risks"
+          ]
+        },
+        {
+          "name": "Azure",
+          "key_concepts": [
+            "Comprehensive introduction to Microsoft Azure cloud platform, including its global data center infrastructure, service offerings, and management portal",
+            "Detailed walkthrough of resource group creation and management, with emphasis on cost control strategies and the importance of proper resource cleanup",
+            "Step-by-step guide to provisioning Ubuntu virtual machines in Azure, including size selection, authentication configuration with SSH keys, and networking options",
+            "In-depth examination of Azure networking concepts including Network Security Groups (NSGs), public/private IP addressing, and port management for service access",
+            "Practical demonstration of server administration using apt package manager for software installation, updates, and system maintenance",
+            "Implementation of static IP address configuration to ensure consistent access to deployed services across restarts and maintenance events",
+            "Comprehensive review of Azure's free service tier and student account options, with guidance on maximizing resources while minimizing costs",
+            "Comparison of different storage options in Azure including Blob Storage, managed disks, and file shares for various application requirements",
+            "Introduction to Azure resource monitoring and management tools for tracking usage, performance, and cost optimization opportunities",
+            "Overview of alternative cloud providers (AWS, Google Cloud) and service equivalents to provide context within the broader cloud ecosystem"
+          ]
+        },
+        {
+          "name": "SSH",
+          "key_concepts": [
+            "Comprehensive explanation of SSH (Secure Shell) architecture, including client-server model, encryption mechanisms, and authentication methods",
+            "Detailed walkthrough of generating secure SSH key pairs (RSA 4096-bit) across different operating systems, with proper permissions and passphrases",
+            "In-depth examination of SSH file structures (~/.ssh directory) and their purposes, including id_rsa (private key), id_rsa.pub (public key), known_hosts, and config files",
+            "Clarification of public-private key relationships, explaining which keys should be stored on servers versus clients, and how key-based authentication works",
+            "Advanced SSH configuration techniques using the ~/.ssh/config file to create aliases, specify connection options, and streamline server access",
+            "Practical guidance on SSH security best practices, including key rotation, passphrase protection, and limiting access permissions",
+            "Step-by-step procedures for adding SSH keys to remote servers through authorized_keys files, enabling passwordless authentication",
+            "Implementation patterns for using SSH keys in automation contexts like CI/CD pipelines, with consideration for security implications",
+            "Troubleshooting common SSH connection issues related to permissions, key formats, and network configurations"
+          ]
+        },
+        {
+          "name": "Running in Production",
+          "key_concepts": [
+            "Comprehensive comparison between development and production runtime environments, highlighting the different requirements and configurations needed for reliable operation",
+            "Detailed implementation of PM2 process manager for Node.js applications, covering installation, startup, monitoring, and process management commands",
+            "In-depth configuration of Gunicorn for Python Flask applications, including worker process optimization, binding configurations, and production-ready settings",
+            "Critical security considerations for production deployments, emphasizing the importance of disabling debug modes, proper error handling, and secure configurations",
+            "Introduction to the concept of reverse proxies as a future topic, previewing their role in load balancing, SSL termination, and request routing",
+            "Examination of application scaling strategies in production environments, balancing performance, resource utilization, and reliability",
+            "Logging and monitoring approaches for production applications to ensure visibility into system behavior, performance, and potential issues",
+            "Practical guidance on service persistence across server restarts, including systemd configuration and automated recovery procedures",
+            "Discussion of environment-specific configuration management to handle differences between development, staging, and production settings"
+          ]
+        },
+        {
+          "name": "Deployment Strategies",
+          "key_concepts": [
+            "Comprehensive analysis of deployment strategy categories, contrasting push-based approaches (where the source initiates deployment) versus pull-based approaches (where the destination requests updates)",
+            "Detailed examination of file transfer deployment methods using SCP/FTP, including benefits, limitations, and scripts for automation",
+            "Step-by-step implementation of SSH-based Git pull deployment, where servers maintain repositories and update via git commands",
+            "Advanced cron job configuration for automated synchronization with git repositories, providing scheduled pull-based deployment without manual intervention",
+            "Implementation of build system/CI/CD approaches for deployment, using GitHub Actions to automate testing, building, and deploying applications",
+            "Comparative analysis of deployment strategies based on reliability, rollback capabilities, complexity, and maintenance requirements",
+            "Optimization techniques for cron-based deployment, including conditional updates that only trigger when changes are detected to minimize unnecessary operations",
+            "Discussion of incremental deployment improvement strategies, acknowledging that deployment approaches evolve as projects mature and requirements change",
+            "Practical guidance on planning for trial runs and simulation environments to validate deployment processes before full implementation"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 4,
+      "title": "Software Quality, Linting, CI",
+      "topics": [
+        {
+          "name": "Software Quality",
+          "key_concepts": [
+            "Comprehensive examination of software quality definitions according to ISO standards and industry frameworks, establishing a common vocabulary for quality discussions",
+            "In-depth analysis of technical debt, including its types (code, design, infrastructure, testing, documentation, people), causes, and consequences for project sustainability",
+            "Systematic approach to identifying code smells as indicators of deeper design problems, with categorization of common patterns and their implications",
+            "Evaluation of software quality measurement tools including SonarQube and Code Climate, with critical discussion of their metrics, limitations, and appropriate use cases",
+            "Detailed exploration of code review benefits based on empirical research, demonstrating quantifiable improvements in defect reduction, code readability, and overall quality",
+            "Discussion of the balance between delivering customer value quickly and maintaining sufficient quality standards to avoid accumulating technical debt",
+            "Analysis of quality gates as decision points in development processes, determining when code is ready to progress to subsequent stages",
+            "Examination of the relationship between software quality and development team productivity, emphasizing that quality is an enabler rather than an impediment to speed",
+            "Strategies for incrementally improving existing codebases with quality issues, balancing refactoring with new feature development"
+          ]
+        },
+        {
+          "name": "CI/CD/CD",
+          "key_concepts": [
+            "Comprehensive definition of Continuous Integration (CI) as the practice of frequently merging code changes to a central repository with automated building and testing",
+            "Detailed explanation of Continuous Delivery (CD) as the process of ensuring merged and tested code is always in a releasable state through automated build processes",
+            "Clear distinction between Continuous Delivery and Continuous Deployment, where the former requires manual approval for production deployment while the latter automates the entire pipeline",
+            "This course's specific interpretation of CI/CD/CD: CI for code integration, first CD for artifact delivery (Docker images), second CD for production deployment",
+            "Comprehensive overview of the CI/CD pipeline architecture, including source control integration, build automation, testing stages, artifact creation, and deployment mechanisms",
+            "Comparative analysis of CI/CD solutions across two categories: self-hosted platforms (Jenkins, Bamboo, TeamCity) versus cloud services (Travis CI, CircleCI, GitHub Actions)",
+            "Detailed explanation of how CI/CD pipelines relate to the DevOps infinity loop model, mapping specific stages to the overall DevOps lifecycle",
+            "Practical implementation of a Continuous Integration pipeline for the class project using GitHub Actions, demonstrating real-world application of CI principles",
+            "Discussion of pipeline optimization strategies to reduce execution time, improve reliability, and provide meaningful feedback to developers"
+          ]
+        },
+        {
+          "name": "Linting",
+          "key_concepts": [
+            "Comprehensive introduction to linting as static code analysis that identifies errors, style violations, suspicious constructs, and potential bugs without execution",
+            "Detailed categorization of linting benefits, including error detection, code consistency, readability improvement, bug prevention, security enhancement, and performance optimization",
+            "Extensive survey of language-specific linters including ESLint/JSHint/Standard (JavaScript), Pylint/Flake8/Black (Python), Checkstyle/PMD (Java), and many others",
+            "Hands-on implementation of linting in a Node.js project using Standard.js, demonstrating configuration, execution, and automated fixing capabilities",
+            "Comparative analysis of linting deployment approaches: local development environment, Git hooks (pre-commit), and CI pipeline integration",
+            "Step-by-step implementation of Git hooks for pre-commit linting across platforms (bash scripts for Unix, PowerShell for Windows), including installation and configuration",
+            "Critical evaluation of Git hook limitations, including local-only execution, manual configuration requirements, and potential bypass mechanisms",
+            "Detailed configuration of linting in GitHub Actions workflows, with proper handling of failure conditions as quality gates",
+            "Introduction to comprehensive multi-language linting tools like SuperLinter and specialized tools like hadolint for Dockerfile linting",
+            "Discussion of IDE integration options for real-time linting feedback during development, focusing on SonarLint as a cross-platform solution"
+          ]
+        },
+        {
+          "name": "Branching Strategies",
+          "key_concepts": [
+            "Comprehensive overview of Git branching strategies as agreements enabling agile team collaboration and production-ready releases",
+            "Detailed comparison of feature branching (separate branches per feature), trunk-based development (frequent merges to main), release branching (branches per release), GitFlow (structured branch hierarchy), and GitHub Flow (PR-centric approach)",
+            "Critical analysis of branching strategy selection criteria based on team size, release frequency, application complexity, and organizational requirements",
+            "In-depth explanation of merge versus rebase approaches to integrating changes, with implications for history linearity, conflict resolution, and team workflows",
+            "Historical context for the evolution of branching strategies, noting the recent trend toward simpler models like trunk-based development in response to continuous delivery practices",
+            "Discussion of branch lifetime management, emphasizing the DevOps principle of reduced work-in-progress through short-lived branches and daily trunk integration",
+            "Practical guidance on implementing branch protection rules to enforce code review, testing requirements, and maintain trunk stability",
+            "Analysis of the relationship between branching strategies and other development practices like feature toggles, testing automation, and deployment pipelines",
+            "Recommendations for documentation and standardization of branching workflows to ensure consistent application across development teams"
+          ]
+        },
+        {
+          "name": "Cron",
+          "key_concepts": [
+            "Comprehensive explanation of cron as a time-based job scheduler in Unix-like systems, including its historical context and modern applications",
+            "Detailed breakdown of crontab syntax with the five time fields (minute, hour, day of month, month, day of week), special characters, and shorthand notations",
+            "Step-by-step guide to editing crontab files, setting environment variables for jobs, and verifying scheduled tasks using crontab -l and log inspection",
+            "Practical implementation of basic cron jobs for system maintenance, log rotation, and application monitoring with proper output redirection",
+            "Advanced techniques for handling tasks requiring sub-minute scheduling through creative combinations of cron jobs and scripts with sleep commands",
+            "Implementation of continuous deployment cron jobs that periodically pull from git repositories and restart applications upon changes",
+            "Optimization strategies for cron-based deployment, including conditional execution that only updates when upstream changes are detected",
+            "Discussion of cron limitations and alternatives, including systemd timers, job scheduling libraries, and dedicated orchestration tools",
+            "Security considerations when running cron jobs, including privilege management, environment variables, and error handling",
+            "Debugging approaches for cron execution issues, focusing on environment differences, path variables, and permission problems"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 5,
+      "title": "Docker, The Simulation",
+      "topics": [
+        {
+          "name": "Build Tools",
+          "key_concepts": [
+            "Comprehensive classification of build tool ecosystems across three levels: OS-level package managers (apt, yum, homebrew, chocolatey), language-specific package managers (npm, pip, gem, maven), and project-specific build tools (make, gradle, webpack)",
+            "Detailed comparison of OS-level package managers across Windows (chocolatey), MacOS (homebrew), and various Linux distributions (apt, yum, dnf, pacman), examining their features, limitations, and appropriate use cases",
+            "In-depth survey of language-specific package managers for major programming languages, analyzing their dependency resolution mechanisms, versioning approaches, and ecosystem characteristics",
+            "Practical examination of build file structures across platforms, highlighting differences in syntax, capability, and integration with broader build pipelines",
+            "Focused exploration of Python virtual environment tools (venv, virtualenv, conda, poetry), with hands-on implementation and best practices for dependency isolation",
+            "Comparative analysis of dependency management approaches, contrasting locked dependencies (package-lock.json, Pipfile.lock) with flexible version ranges (semver in package.json, requirements.txt)",
+            "Discussion of build tool selection criteria based on project requirements, team expertise, integration needs, and deployment targets",
+            "Examination of the relationship between build tools and containerization, particularly how package managers interact with Docker build processes",
+            "Overview of build caching strategies across different tools to optimize build times and resource utilization"
+          ]
+        },
+        {
+          "name": "Packaging",
+          "key_concepts": [
+            "Comprehensive analysis of software packaging motivations, emphasizing reusability, distribution, versioning, and dependency management as primary benefits",
+            "Detailed classification of distribution methods across three categories: source code (.zip/.tar.gz, setup.py, requirements.txt), binary code (.exe/.dmg/.deb/.rpm, .jar, .dll), and containers (Docker, Kubernetes)",
+            "In-depth examination of language-specific package formats including Python wheels, Node.js modules, Java JARs, and Ruby gems, with examples of their internal structures",
+            "Comparative evaluation of package repository services including DockerHub, GitHub Packages, and JFrog Artifactory, discussing their features, limitations, and integration capabilities",
+            "Comprehensive explanation of Semantic Versioning (SemVer) with the MAJOR.MINOR.PATCH format, detailing when and how to increment each component based on compatibility changes",
+            "Practical guidance on package metadata requirements, including descriptions, authors, licenses, and dependency declarations for proper ecosystem integration",
+            "Discussion of package signing and verification mechanisms to ensure authenticity and integrity during distribution",
+            "Analysis of package caching strategies in CI/CD pipelines to optimize build times and reduce network dependencies",
+            "Exploration of artifact promotion workflows across development, testing, staging, and production environments with appropriate quality gates"
+          ]
+        },
+        {
+          "name": "Virtualization/Containerization",
+          "key_concepts": [
+            "Comprehensive definition of virtualization as the creation of software-based representations of hardware resources, applications, or entire systems",
+            "Detailed taxonomy of virtualization types, distinguishing between hardware virtualization (virtual machines with dedicated OS kernels) and software virtualization (containers sharing the host kernel)",
+            "In-depth explanation of hypervisors (VMMs) as the foundation of traditional virtualization, comparing Type 1 (bare metal) and Type 2 (hosted) implementations",
+            "Thorough examination of the technical foundations of containerization through Linux kernel features: namespaces for resource isolation and control groups (cgroups) for resource limitation",
+            "Historical perspective on container evolution from chroot (1979) through FreeBSD jails, Linux VServer, OpenVZ, LXC, to the modern Docker era (2013)",
+            "Comparative analysis of containers versus virtual machines, highlighting differences in resource efficiency, startup time, isolation level, and appropriate use cases",
+            "Overview of modern container runtimes beyond Docker, including containerd, Podman, and Kata Containers, with discussion of their distinguishing features",
+            "Critical discussion of containerization's relationship to DevOps, emphasizing how containers enable infrastructure abstraction, reduce specialization requirements, and facilitate automation",
+            "Evaluation of containerization limitations and challenges, particularly around security, stateful applications, and cross-platform compatibility"
+          ]
+        },
+        {
+          "name": "Docker",
+          "key_concepts": [
+            "Comprehensive explanation of core Docker terminology: images (read-only templates/blueprints), containers (runtime instances), volumes (persistent storage), and networking (communication between containers and external systems)",
+            "Detailed walkthrough of fundamental Docker CLI commands including docker run, pull, ps, stop, and rm, with practical examples and common flag combinations",
+            "In-depth exploration of Docker container lifecycle from creation through starting, pausing, stopping, to removal, with appropriate commands for each stage",
+            "Hands-on implementation of Docker volumes for data persistence, examining named volumes, bind mounts, and tmpfs mounts with their respective use cases and configuration options",
+            "Practical demonstration of Docker networking concepts, including network creation, container attachment, inter-container communication, and port mapping to host systems",
+            "Step-by-step guide to running interactive containers with terminal access (-it flags), particularly useful for debugging and exploration",
+            "Examination of container resource management including CPU, memory, and storage limitations through appropriate Docker run flags",
+            "Analysis of Docker image inspection techniques to understand layers, metadata, and configuration details",
+            "Introduction to Docker platform management commands for system pruning, image cleanup, and resource monitoring",
+            "Practical exercises with Alpine Linux containers to demonstrate lightweight container principles and interactive shell usage"
+          ]
+        },
+        {
+          "name": "Dockerfile",
+          "key_concepts": [
+            "Comprehensive breakdown of Dockerfile syntax and structure, examining each instruction (FROM, WORKDIR, COPY, RUN, CMD, ENTRYPOINT, EXPOSE) with detailed examples for Python and Node.js applications",
+            "In-depth comparison of RUN, CMD, and ENTRYPOINT instructions, clarifying their distinct purposes, syntax options, and appropriate use cases",
+            "Detailed explanation of Docker's layering system, emphasizing how each instruction creates a new layer and the importance of layer optimization for image size and build performance",
+            "Practical strategies for Dockerfile optimization, particularly reorganizing instructions to leverage Docker's build cache effectively by placing rarely-changing instructions before frequently-changing ones",
+            "Step-by-step implementation of non-root user creation in Dockerfiles using the USER instruction to improve container security through privilege separation",
+            "Detailed configuration of .dockerignore files to exclude unnecessary files from the build context, improving build performance and reducing image size",
+            "Demonstration of multi-stage builds to separate build-time dependencies from runtime environments, resulting in significantly smaller production images",
+            "Analysis of base image selection criteria, balancing size, security, compatibility, and update frequency considerations",
+            "Practical implementation of a complete Dockerfile for a Flask application, incorporating security best practices, layer optimization, and proper configuration",
+            "Discussion of Dockerfile linting and validation tools to ensure adherence to best practices and identify potential issues early in development"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 6,
+      "title": "Docker-compose, Continuous Delivery, DevOps",
+      "topics": [
+        {
+          "name": "Docker-compose",
+          "key_concepts": [
+            "Comprehensive introduction to docker-compose as a tool for defining and running multi-container Docker applications, contrasting it with managing individual containers through Docker CLI",
+            "Detailed examination of docker-compose.yml file structure and syntax, covering services, networks, volumes, and environment configuration with practical examples",
+            "Comparative analysis of docker-compose (Python-based CLI tool) versus docker compose (Go-based Docker CLI plugin), highlighting subtle differences in image naming conventions and commands",
+            "In-depth exploration of service networking in compose files, including automatic network creation, DNS resolution between services, and external network configuration",
+            "Practical demonstration of volume management strategies: named volumes for persistence, bind mounts for development, and tmpfs for temporary storage",
+            "Thorough explanation of container dependency management using depends_on directives with condition checking to ensure proper startup ordering",
+            "Implementation of environment variable configuration approaches, from inline definition to external .env files and secrets management",
+            "Advanced compose file techniques including extension fields, profiles for selective service startup, and compose file version differences",
+            "Practical cleanup strategies with docker-compose rm commands and system pruning to manage resources effectively",
+            "Integration of docker-compose with Makefiles to simplify common command sequences and standardize development workflows"
+          ]
+        },
+        {
+          "name": "Hot Reload in Docker",
+          "key_concepts": [
+            "Comprehensive survey of live reload/hot reload tools across programming languages, including built-in framework capabilities (Python), nodemon (Node.js), jrebel (Java), cargo watch (Rust), and others",
+            "Detailed analysis of the challenges Docker creates for development experience, particularly around file system isolation and process management",
+            "Step-by-step implementation of volume mounts to synchronize code between host and container for real-time development without rebuilding images",
+            "Practical configuration of Nodemon with Docker for Node.js applications, including proper Dockerfile.dev creation with global nodemon installation",
+            "In-depth implementation of docker-compose.dev.yml files specifically designed for development environments, with volume configurations that optimize the developer experience",
+            "Detailed explanation of volume caching strategies for node_modules to preserve installation while allowing code changes, improving startup time and consistency",
+            "Step-by-step guide to implementing hot reload configurations for the class project using docker-compose, with practical testing of real-time code changes",
+            "Analysis of hot reload implementation differences across frameworks and languages, acknowledging the need for language-specific approaches",
+            "Discussion of performance considerations for Docker-based development, including volume mount performance across operating systems",
+            "Exploration of alternative development approaches including remote development containers and cloud-based development environments",
+            "Clarification that hot reload tools are specifically for development environments and not suitable for production deployment",
+            "Integration of hot reload capabilities with debugging tools to create comprehensive development environments within containers"
+          ]
+        },
+        {
+          "name": "Debug docker-compose",
+          "key_concepts": [
+            "Comprehensive walkthrough of docker-compose troubleshooting methodology, starting with a deliberately flawed setup to demonstrate systematic debugging approaches",
+            "Detailed examination of container inspection techniques using docker-compose ps, docker logs, and exec commands to identify runtime issues not apparent from configuration",
+            "Step-by-step network debugging between containers, including installation of diagnostic tools (ping, curl), DNS resolution testing, and network inspection with docker network commands",
+            "Practical demonstration of environment variable debugging, verifying variable presence with docker exec and env commands, and correcting configuration syntax errors",
+            "In-depth analysis of network isolation issues in docker-compose, particularly how separate networks prevent inter-service communication despite being defined in the same compose file",
+            "Hands-on implementation of database connection testing in containerized environments, focusing on hostname resolution, credential configuration, and port accessibility",
+            "Systematic inspection of service startup ordering and dependency issues, with implementation of proper depends_on conditions to ensure services initialize correctly",
+            "Examination of volume mount problems, particularly permissions issues and path discrepancies across operating systems",
+            "Demonstration of iterative problem-solving techniques, making one change at a time and verifying results to isolate and resolve complex container interactions",
+            "Discussion of logging configuration best practices to enhance visibility into containerized application behavior for more effective debugging"
+          ]
+        },
+        {
+          "name": "Agile",
+          "key_concepts": [
+            "Comprehensive historical overview of software development methodologies, contrasting traditional waterfall approaches (requirements → design → implementation → verification → maintenance) with iterative Agile methods",
+            "Detailed examination of pre-Agile development processes, particularly the extensive upfront planning, specification writing, and risk analysis that often delayed implementation",
+            "In-depth analysis of the four core values in the Agile Manifesto: individuals and interactions over processes and tools, working software over comprehensive documentation, customer collaboration over contract negotiation, responding to change over following a plan",
+            "Critical discussion of Agile adoption challenges, particularly in large enterprises where organizational resistance, leadership support issues, and siloed teams create implementation barriers",
+            "Practical examination of Agile methodologies in different organizational contexts, noting research showing better success rates in smaller organizations compared to large enterprises",
+            "Analysis of the hybrid model trend, where larger organizations combine Agile methodologies with traditional approaches to balance flexibility with organizational constraints",
+            "Evaluation of Agile's impact on developer experience, addressing concerns about potential burnout in high-velocity Agile environments",
+            "Critical perspective on Agile as industry buzzword versus actual implementation, encouraging skepticism toward organizations claiming Agile practices without fundamental cultural changes",
+            "Discussion of Agile's relationship to DevOps, particularly how both emphasize collaboration, iterative improvement, and customer-focused development",
+            "Reflection on the continuing evolution of Agile methodologies in response to changing technology landscapes and organizational needs"
+          ]
+        },
+        {
+          "name": "DevOps",
+          "key_concepts": [
+            "Comprehensive introduction to DevOps as a cultural and professional movement focused on breaking down silos between development and operations to increase deployment velocity and system reliability",
+            "Detailed examination of DevOps business value propositions, demonstrating how faster deployments, improved security, robust testing, and reproducible infrastructure directly contribute to business success",
+            "In-depth analysis of historical software release cycles, contrasting traditional month/year-long cycles with DevOps goals of multiple daily deployments to deliver customer value faster",
+            "Critical examination of traditional Dev vs. Ops conflicts, where developers prioritize change while operations teams prioritize stability, and how DevOps resolves this tension",
+            "Comprehensive explanation of the DevOps Möbius strip/infinity loop model, illustrating the continuous cycle of Plan → Code → Build → Test → Release → Deploy → Operate → Monitor",
+            "Detailed critique of common DevOps anti-patterns, particularly the creation of separate 'DevOps teams' that perpetuate silos rather than embracing the cross-functional responsibility model",
+            "Examination of DevOps literature including 'The DevOps Handbook' and 'The Phoenix Project', extracting key concepts and practical implementation strategies",
+            "Analysis of culture change approaches using Shook's behavior model, emphasizing that changing behavior (through DevOps practices) leads to cultural transformation rather than vice versa",
+            "Critical discussion of DevOps review culture, highlighting transparent communication, pair programming benefits (despite being 15% slower, it produces 15% fewer errors), and knowledge sharing practices",
+            "Detailed review of Google's code review practices, showing how larger change sets exponentially increase review time, supporting the DevOps principle of small, frequent changes"
+          ]
+        },
+        {
+          "name": "Continuous Delivery",
+          "key_concepts": [
+            "Comprehensive definition of Continuous Delivery in the course context as the process of automatically building, testing, and preparing code for release as deployable artifacts (specifically Docker images)",
+            "Detailed clarification of terminology differences across the industry, acknowledging the various interpretations of Continuous Delivery versus Continuous Deployment while establishing clear definitions for the course",
+            "In-depth implementation guide for configuring GitHub Actions workflows to build Docker images automatically upon code changes, with proper testing and validation steps",
+            "Step-by-step process for publishing Docker images to GitHub Packages container registry, including authentication, repository naming conventions, and versioning strategies",
+            "Practical walkthrough of container registry configuration, covering authentication token generation, repository visibility settings, and access control mechanisms",
+            "Detailed explanation of Docker image tagging strategies, particularly the use of 'latest' tags versus explicit version tags and their implications for deployment reliability",
+            "Implementation of automated Docker Compose file updates to reference newly published images, ensuring configuration remains synchronized with artifact versions",
+            "Analysis of quality gates in the Continuous Delivery pipeline, establishing criteria that must be met before artifacts are considered ready for potential deployment",
+            "Practical demonstration using the class project to implement a complete Continuous Delivery pipeline from code commit through testing to artifact publication",
+            "Discussion of monitoring and notification strategies to alert teams about delivery pipeline status, ensuring visibility into the artifact creation process"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 7,
+      "title": "Guest Lecture",
+      "topics": [
+        {
+          "name": "DevOps in Practice",
+          "key_concepts": [
+            "Comprehensive industry perspective on DevOps implementation from Eficode, providing students with real-world context beyond academic theory",
+            "Detailed examination of DevOps evolution through historical stages, from its origins addressing Dev/Ops conflicts to current holistic organizational transformation approaches",
+            "In-depth analysis of common DevOps implementation challenges in organizations, including resistance to change, tooling complexity, and cross-functional collaboration barriers",
+            "Practical strategies for establishing psychological safety in development teams, emphasizing blameless culture, learning from failure, and constructive feedback mechanisms",
+            "Detailed case studies of successful DevOps transformations across various industries, demonstrating tangible business outcomes including deployment frequency improvements, lead time reduction, and quality enhancements",
+            "Analysis of pipeline optimization techniques from industry practitioners, highlighting the critical importance of reducing execution time for competitive advantage",
+            "Exploration of DevOps metrics and measurement approaches used in professional environments to track progress and demonstrate business value",
+            "Discussion of specialized DevOps roles emerging in the industry, contrasting with the ideal of fully integrated cross-functional responsibility",
+            "Examination of the relationship between DevOps and other methodologies including Agile, Lean, and Site Reliability Engineering in professional contexts",
+            "Practical guidance for students entering the industry, including key skills, certifications, and experiences valued by employers seeking DevOps practitioners"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 8,
+      "title": "Continuous Deployment",
+      "topics": [
+        {
+          "name": "DevOps Principles",
+          "key_concepts": [
+            "Comprehensive examination of systematic DevOps definitions from academic research, analyzing commonalities and variations across different interpretations to establish a shared understanding",
+            "Detailed exploration of The Three Ways framework from The DevOps Handbook: Flow (left-to-right value delivery), Feedback (right-to-left information flow), and Continual Learning and Experimentation (creating a culture of inquiry and improvement)",
+            "In-depth analysis of Flow principles, including work visualization, Work In Progress (WIP) limitation, batch size reduction, handoff minimization, constraint identification, and waste elimination",
+            "Thorough investigation of Feedback principles, covering problem visibility, collaborative problem-solving approaches, quality focus at the source, and optimization for downstream work",
+            "Comprehensive study of Continual Learning principles, examining the institutionalization of daily improvement, global knowledge sharing, resilience pattern injection, and leadership's role in fostering learning culture",
+            "Practical strategies for breaking down information and knowledge silos, with specific techniques for documentation, cross-training, and organizational transparency",
+            "Analysis of how DevOps principles translate to practical implementation in student group projects, with reflection questions for each principle",
+            "Discussion of the balance between technical implementation and cultural adoption of DevOps principles, emphasizing that technology alone is insufficient without corresponding mindset changes",
+            "Exploration of measurement approaches for DevOps principles, establishing observable indicators of successful implementation",
+            "Critical reflection on the applicability of DevOps principles across different organizational contexts and project types, acknowledging that adaptation may be necessary"
+          ]
+        },
+        {
+          "name": "DevOps is People",
+          "key_concepts": [
+            "Comprehensive examination of the human dimension of DevOps, emphasizing that people are not machines and sustainable practices must account for human factors",
+            "Detailed analysis of the DevOps philosophy as fundamentally aimed at identifying and alleviating pain points rather than increasing pressure on workers",
+            "In-depth investigation of research showing high productivity can mask workforce exhaustion, highlighting the importance of sustainable pace in DevOps practices",
+            "Thorough exploration of the PTT framework (People, Process, Technology) as a holistic approach to organizational success, emphasizing that all three elements must be balanced",
+            "Comprehensive overview of the SPACE framework for holistic productivity measurement: Satisfaction/well-being, Performance, Activity, Communication/collaboration, and Efficiency/flow",
+            "Detailed case study of the Andon Cord concept from Toyota Production System, applied to software development at Excella to create a collaborative problem-solving culture",
+            "Practical implementation strategies for fostering psychological safety in DevOps environments, including blameless postmortems, celebration of learning from failure, and transparent communication",
+            "Critical discussion of DevOps culture pitfalls, particularly cult-like adoption without critical thinking or adaptation to organizational context",
+            "Analysis of how physical workspace design and remote work practices influence DevOps culture and collaboration patterns",
+            "Reflection on the balance between individual autonomy and team cohesion in successful DevOps implementations, recognizing the need for both personal responsibility and collective support"
+          ]
+        },
+        {
+          "name": "Postmortem",
+          "key_concepts": [
+            "Comprehensive definition of postmortems as structured documents outlining incident response, resolution steps, root cause analysis, and future prevention measures",
+            "Detailed explanation of blameless postmortem philosophy, shifting focus from individual responsibility to systemic factors and learning opportunities",
+            "In-depth analysis of the role of postmortems in DevOps culture, particularly how they reinforce continuous improvement and psychological safety",
+            "Thorough examination of postmortem components including incident timeline, impact assessment, detection methods, response actions, root cause analysis, and follow-up items",
+            "Practical case study analysis of real industry incidents from GitHub and Cloudflare, extracting best practices and common patterns in postmortem communication",
+            "Detailed strategies for conducting effective postmortem meetings, including facilitation techniques, participation guidelines, and documentation approaches",
+            "Critical discussion of the systems thinking perspective in postmortems, recognizing that humans will inevitably make mistakes and systems should be designed to account for this reality",
+            "Analysis of postmortem follow-up processes to ensure identified improvements are actually implemented rather than documented and forgotten",
+            "Examination of postmortem templates and standardization approaches to ensure consistent analysis across different incidents and teams",
+            "Discussion of public versus private postmortems, weighing transparency benefits against potential disclosure concerns"
+          ]
+        },
+        {
+          "name": "Continuous Deployment",
+          "key_concepts": [
+            "Comprehensive definition of Continuous Deployment in the course context as the automated release of built artifacts to production environments, completing the CI/CD/CD pipeline",
+            "Detailed examination of deployment strategies for the Flask application, ranging from basic approaches (manual git pull and restart) to fully automated container-based deployment",
+            "In-depth comparison of approaches where code exists on the server versus container-only approaches where application code never directly touches production servers",
+            "Thorough analysis of 'Full CD' as the course's ultimate goal, where entire deployment processes including configuration changes are automated without manual intervention",
+            "Practical implementation of GitHub Actions workflows for deployment automation, using SSH and SCP commands directly rather than relying on third-party marketplace actions for security",
+            "Detailed configuration of quality gates across multiple jobs in GitHub Actions, creating dependencies that ensure deployment only occurs after successful testing and security validation",
+            "Examination of workflow sequencing techniques, allowing one workflow to trigger another only upon successful completion to create staged deployment pipelines",
+            "Comprehensive strategies for rollback implementation at each stage of the CI/CD/CD process, ensuring quick recovery from deployment failures",
+            "Analysis of industry deployment practices from companies like GitHub, Amazon, and Facebook, providing context about deployment frequency (up to thousands per day) and reliability expectations",
+            "Practical demonstration using the class project to implement a complete Continuous Deployment pipeline that automatically delivers application updates to production environments"
+          ]
+        },
+        {
+          "name": "Reverse Proxies",
+          "key_concepts": [
+            "Comprehensive introduction to reverse proxies including Nginx, Apache, HAProxy, and Traefik as intermediaries between clients and application servers",
+            "Detailed explanation of reverse proxy benefits including load balancing across multiple backends, HTTP caching for performance, centralized port protection, and simplified TLS implementation",
+            "Hands-on configuration of Nginx through practical exercises, examining its directory structure, configuration syntax (directives and contexts), and basic server block setup",
+            "Step-by-step implementation of static content serving with Nginx, including proper MIME type configuration and location block definitions",
+            "In-depth exploration of Nginx location matching patterns, contrasting exact matches, prefix matches, regular expression matches, and nested location blocks",
+            "Practical configuration of proxy_pass directives to forward requests to application servers, including proper header management for maintaining client information",
+            "Detailed examination of Nginx as implemented in the class project, showing how it routes traffic to the Flask application while providing additional security and performance benefits",
+            "Analysis of deployment strategies for Nginx configuration, comparing direct file placement versus container-based approaches with volumes",
+            "Discussion of advanced Nginx features including rate limiting, access control, and custom error pages for production-ready implementations",
+            "Exploration of monitoring and logging configuration to provide visibility into proxy behavior and performance characteristics"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": 9,
+      "title": "Testing, Security",
+      "topics": [
+        {
+          "name": "DevSecOps",
+          "key_concepts": [
+            "Comprehensive introduction to DevSecOps as the integration of security throughout the DevOps lifecycle, contrasting with traditional approaches where security is a separate, final stage",
+            "Detailed examination of the organizational shift where security teams transition from enforcement roles to advisory positions, empowering developers to implement security practices directly",
+            "In-depth analysis of the security team ratio challenge (typically 100:10:1 for Dev:Ops:Security), highlighting why automation and integration are essential for effective security scaling",
+            "Thorough explanation of 'shifting left' principles, moving security considerations earlier in the development process to identify and address vulnerabilities before they reach production",
+            "Detailed exploration of the DevSec

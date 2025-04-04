@@ -146,4 +146,11 @@ ports:
 
 
 
+## continuous Testing
+
+article: 
+- title: Shift left vs shift right: A DevOps mystery solved
+- primer: Shift-left evaluation reduces defects and speeds delivery in development. Shift-right ensures reliability in production. Both=better software
+https://www.dynatrace.com/news/blog/what-is-shift-left-and-what-is-shift-right/
+
 

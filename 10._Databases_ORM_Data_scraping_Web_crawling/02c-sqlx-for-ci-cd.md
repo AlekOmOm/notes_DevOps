@@ -1,14 +1,14 @@
 # 2c. SQLx CI/CD Workflow 🔄
 
-[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) |  [Next: Backup Documentation ->](./03-backup-documentation.md)
+[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
-next: [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+next: [02d - SQLx Conceptual Landscape](./02d-sqlx-conceptual-landscape.md)
 
 ---
 - [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
 - [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
 - [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
-- [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+- [02d - SQLx Conceptual Landscape](./02d-sqlx-conceptual-landscape.md)
 ---
 
 ## Table of Contents
@@ -18,6 +18,7 @@ next: [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
 - [GitHub Actions Workflow](#github-actions-workflow)
 - [Deployment Strategies](#deployment-strategies)
 - [Troubleshooting](#troubleshooting)
+- [Conclusion](#conclusion)
 
 ## Introduction
 
@@ -50,7 +51,7 @@ This command creates a `sqlx-data.json` file containing:
 - Result types
 - Database-specific metadata
 
-This file should be committed to your repository, enabling builds without a database connection.
+This file should be committed to your repository, enabling builds without a database connection. This file contains the metadata SQLx needs for offline compilation and should be committed to your repository to version your database schema expectations alongside your code.
 
 ### Setting Up Your Project
 
@@ -64,6 +65,193 @@ This file should be committed to your repository, enabling builds without a data
      "json",
      "offline"         # Important for CI/CD
    ]}
+   ```
+
+2. **Create a prepare script**:
+   ```bash
+   #!/bin/bash
+   # prepare-sqlx.sh
+   
+   # Create development database in a dedicated directory
+   mkdir -p .sqlx
+   touch .sqlx/dev.db
+   
+   # Run migrations to ensure schema is up-to-date
+   cargo sqlx migrate run --database-url sqlite:.sqlx/dev.db
+   
+   # Generate SQLx metadata file
+   cargo sqlx prepare --database-url sqlite:.sqlx/dev.db --merged
+   
+   echo "SQLx metadata prepared for offline mode"
+   ```
+
+3. **Add sqlx-data.json to version control**:
+   ```bash
+   git add sqlx-data.json
+   git commit -m "Add SQLx metadata for offline builds"
+   ```
+
+## GitHub Actions Workflow
+
+Here's a comprehensive GitHub Actions workflow for a Rust Actix application with SQLx:
+
+```yaml
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      # Enable SQLx offline mode for CI builds (used during compile-time checks)
+      - name: Configure SQLx
+        run: |
+          echo "SQLX_OFFLINE=true" >> $GITHUB_ENV
+      
+      # Verify that sqlx-data.json is up-to-date and present
+      - name: Verify SQLx metadata
+        run: |
+          if [ ! -f sqlx-data.json ]; then
+            echo "Error: sqlx-data.json not found"
+            echo "Run 'cargo sqlx prepare' locally and commit the file"
+            exit 1
+          fi
+          
+          # Also check if metadata matches current queries using temporary database
+          mkdir -p .sqlx
+          touch .sqlx/test.db
+          
+          # Apply migrations to test database to create schema
+          cargo sqlx migrate run --database-url sqlite:.sqlx/test.db
+          
+          # Check if prepare would generate the same file
+          SQLX_DATABASE_URL=sqlite:.sqlx/test.db cargo sqlx prepare --check
+      
+      # Build the application
+      - name: Build
+        run: cargo build --release
+      
+      # Build Docker image
+      - name: Build Docker image
+        if: github.event_name != 'pull_request'
+        run: |
+          docker build -t myapp:${{ github.sha }} .
+      
+      # Deploy (only on main branch push)
+      - name: Deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          DB_PATH: ${{ secrets.DB_PATH }}
+        run: |
+          # Deploy with the real database path from secrets
+          echo "Deploying with database at: $DB_PATH"
+          # Your deployment commands here
+```
+
+## Deployment Strategies
+
+Before implementing any deployment strategy, it's crucial to understand that migrations must be run during deployment against the actual runtime database. SQLx's offline mode handles compilation, but your application still needs to execute migrations at startup.
+
+### Strategy 1: SQLite with Absolute Path
+
+For applications using SQLite with a specific database path on the deployment server:
+
+```yaml
+# Deployment step in GitHub Actions
+- name: Deploy with Docker Compose
+  env:
+    DB_PATH: ${{ secrets.DB_PATH }}
+  run: |
+    echo "DATABASE_URL=sqlite:$DB_PATH" > .env
+    docker-compose up -d
+```
+
+Docker Compose file:
+```yaml
+version: '3'
+services:
+  app:
+    image: myapp:${GITHUB_SHA}
+    env_file: .env
+    volumes:
+      # Mount the directory containing the database
+      - /path/on/host:/data
+```
+
+### Strategy 2: PostgreSQL Connection
+
+For applications using PostgreSQL:
+
+```yaml
+# Deployment step
+- name: Deploy with PostgreSQL
+  env:
+    PG_USER: ${{ secrets.PG_USER }}
+    PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
+    PG_HOST: ${{ secrets.PG_HOST }}
+    PG_DB: ${{ secrets.PG_DB }}
+  run: |
+    echo "DATABASE_URL=postgres://$PG_USER:$PG_PASSWORD@$PG_HOST/$PG_DB" > .env
+    docker-compose up -d
+```
+
+### Strategy 3: Database Switching Pattern
+
+For applications that need to support both SQLite and PostgreSQL:
+
+```rust
+// database.rs
+use sqlx::{Any, AnyPool};
+use std::env;
+
+pub async fn create_pool() -> Result<AnyPool, sqlx::Error> {
+    let db_type = env::var("DB_TYPE").unwrap_or_else(|_| "sqlite".to_string());
+    
+    let database_url = match db_type.as_str() {
+        "postgres" => {
+            let user = env::var("PG_USER").expect("PG_USER must be set");
+            let password = env::var("PG_PASSWORD").expect("PG_PASSWORD must be set");
+            let host = env::var("PG_HOST").expect("PG_HOST must be set");
+            let db = env::var("PG_DB").expect("PG_DB must be set");
+            
+            format!("postgres://{}:{}@{}/{}", user, password, host, db)
+        },
+        _ => {
+            // Default to SQLite
+            let path = env::var("DB_PATH").unwrap_or_else(|_| "./data.db".to_string());
+            format!("sqlite:{}", path)
+        }
+    };
+    
+    sqlx::any::AnyPoolOptions::new()
+        .max_connections(5)
+        .connect(&database_url)
+        .await
+}
+```
 
 ## Troubleshooting
 
@@ -201,177 +389,6 @@ By following these practices, your Rust application can leverage SQLx's powerful
 
 ---
 
-[<- Back to Docker with Rust and SQLx](./02b-docker-rust-sqlx.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
-   ```
+[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
-2. **Create a prepare script**:
-   ```bash
-   #!/bin/bash
-   # prepare-sqlx.sh
-   
-   # Create development database
-   touch dev.db
-   
-   # Run migrations to ensure schema is up-to-date
-   cargo sqlx migrate run --database-url sqlite:dev.db
-   
-   # Generate SQLx metadata file
-   cargo sqlx prepare --database-url sqlite:dev.db --merged
-   
-   echo "SQLx metadata prepared for offline mode"
-   ```
-
-3. **Add sqlx-data.json to version control**:
-   ```bash
-   git add sqlx-data.json
-   git commit -m "Add SQLx metadata for offline builds"
-   ```
-
-## GitHub Actions Workflow
-
-Here's a comprehensive GitHub Actions workflow for a Rust Actix application with SQLx:
-
-```yaml
-name: Build and Deploy
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-      
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      
-      # Enable SQLx offline mode for CI builds
-      - name: Configure SQLx
-        run: |
-          echo "SQLX_OFFLINE=true" >> $GITHUB_ENV
-      
-      # Verify that sqlx-data.json is up-to-date
-      - name: Verify SQLx metadata
-        run: |
-          if [ ! -f sqlx-data.json ]; then
-            echo "Error: sqlx-data.json not found"
-            echo "Run 'cargo sqlx prepare' locally and commit the file"
-            exit 1
-          fi
-      
-      # Build the application
-      - name: Build
-        run: cargo build --release
-      
-      # Build Docker image
-      - name: Build Docker image
-        if: github.event_name != 'pull_request'
-        run: |
-          docker build -t myapp:${{ github.sha }} .
-      
-      # Deploy (only on main branch push)
-      - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          DB_PATH: ${{ secrets.DB_PATH }}
-        run: |
-          # Deploy with the real database path from secrets
-          echo "Deploying with database at: $DB_PATH"
-          # Your deployment commands here
-```
-
-## Deployment Strategies
-
-### Strategy 1: SQLite with Absolute Path
-
-For applications using SQLite with a specific database path on the deployment server:
-
-```yaml
-# Deployment step in GitHub Actions
-- name: Deploy with Docker Compose
-  env:
-    DB_PATH: ${{ secrets.DB_PATH }}
-  run: |
-    echo "DATABASE_URL=sqlite:$DB_PATH" > .env
-    docker-compose up -d
-```
-
-Docker Compose file:
-```yaml
-version: '3'
-services:
-  app:
-    image: myapp:${GITHUB_SHA}
-    env_file: .env
-    volumes:
-      # Mount the directory containing the database
-      - /path/on/host:/data
-```
-
-### Strategy 2: PostgreSQL Connection
-
-For applications using PostgreSQL:
-
-```yaml
-# Deployment step
-- name: Deploy with PostgreSQL
-  env:
-    PG_USER: ${{ secrets.PG_USER }}
-    PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-    PG_HOST: ${{ secrets.PG_HOST }}
-    PG_DB: ${{ secrets.PG_DB }}
-  run: |
-    echo "DATABASE_URL=postgres://$PG_USER:$PG_PASSWORD@$PG_HOST/$PG_DB" > .env
-    docker-compose up -d
-```
-
-### Strategy 3: Database Switching Pattern
-
-For applications that need to support both SQLite and PostgreSQL:
-
-```rust
-// database.rs
-use sqlx::{Any, AnyPool};
-use std::env;
-
-pub async fn create_pool() -> Result<AnyPool, sqlx::Error> {
-    let db_type = env::var("DB_TYPE").unwrap_or_else(|_| "sqlite".to_string());
-    
-    let database_url = match db_type.as_str() {
-        "postgres" => {
-            let user = env::var("PG_USER").expect("PG_USER must be set");
-            let password = env::var("PG_PASSWORD").expect("PG_PASSWORD must be set");
-            let host = env::var("PG_HOST").expect("PG_HOST must be set");
-            let db = env::var("PG_DB").expect("PG_DB must be set");
-            
-            format!("postgres://{}:{}@{}/{}", user, password, host, db)
-        },
-        _ => {
-            // Default to SQLite
-            let path = env::var("DB_PATH").unwrap_or_else(|_| "./data.db".to_string());
-            format!("sqlite:{}", path)
-        }
-    };
-    
-    sqlx::any::AnyPoolOptions::new()
-        .max_connections(5)
-        .connect(&database_url)
-        .await
-}
+next: [02d - SQLx Conceptual Landscape](./02d-conceptual-landscape-SQLx.md)

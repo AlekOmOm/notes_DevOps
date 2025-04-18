@@ -1,16 +1,14 @@
 # 2d. Conceptual Landscape of SQLx 🧩
 
-[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) |  [Next: Backup Documentation ->](./03-backup-documentation.md)
+[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
 
 ---
 - [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
 - [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
 - [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
-- [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+- [02d - SQLx Conceptual Landscape](./02d-sqlx-conceptual-landscape.md)
 ---
-
-
 ## Table of Contents
 - [2d. Conceptual Landscape of SQLx 🧩](#2d-conceptual-landscape-of-sqlx-)
   - [Table of Contents](#table-of-contents)

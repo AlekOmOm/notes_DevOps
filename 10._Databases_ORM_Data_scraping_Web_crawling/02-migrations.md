@@ -2,8 +2,6 @@
 
 [<- Back to Database ORM](./01-database-orm.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
-next: [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
-
 ---
 - [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
 - [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)

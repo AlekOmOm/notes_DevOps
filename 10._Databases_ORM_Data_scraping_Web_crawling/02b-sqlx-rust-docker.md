@@ -1,6 +1,6 @@
 # 2b. Docker with Rust and SQLx 🦀🐳
 
-[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) |  [Next: Backup Documentation ->](./03-backup-documentation.md)
+[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
 next: [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
 
@@ -8,10 +8,8 @@ next: [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
 - [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
 - [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
 - [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
-- [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+- [02d - SQLx Conceptual Landscape](./02d-sqlx-conceptual-landscape.md)
 ---
-
-
 ## Table of Contents
 - [Overview](#overview)
 - [SQLx in Rust Applications](#sqlx-in-rust-applications)
@@ -30,6 +28,8 @@ This guide addresses the specific challenges of:
 2. Handling database connections in CI/CD environments
 3. Managing different database types (SQLite vs PostgreSQL)
 4. Configuring database paths for deployment
+
+> Note: While this guide focuses on SQLx, it's worth mentioning that SQLx provides its own built-in migration system (`sqlx migrate`) which integrates directly with the SQLx workflow, unlike the Knex.js examples in the previous notes.
 
 ## SQLx in Rust Applications
 
@@ -109,10 +109,11 @@ SQLx provides an offline mode that enables builds without a database connection:
    cargo sqlx prepare --database-url "sqlite:./dev.db"
    ```
 
-2. Commit this file to your repository
+2. Commit this file to your repository to version your database schema expectations alongside your code
 
 3. Set the `SQLX_OFFLINE=true` environment variable during builds:
    ```dockerfile
+   # Set during Docker build for compile-time checks (offline mode)
    ENV SQLX_OFFLINE=true
    ```
 
@@ -124,13 +125,14 @@ FROM rust:1.68 as builder
 WORKDIR /usr/src/app
 COPY . .
 
-# Build with offline mode - no database needed
+# Build with offline mode - no database needed during compilation
 ENV SQLX_OFFLINE=true
 RUN cargo build --release
 
 FROM debian:buster-slim
 COPY --from=builder /usr/src/app/target/release/my-app /usr/local/bin/
 
+# Runtime database connection will be provided at container startup
 CMD ["my-app"]
 ```
 
@@ -215,6 +217,7 @@ COPY . .
 
 # Create temporary SQLite database for compilation
 RUN mkdir -p .sqlx && touch .sqlx/temp.db
+# Set during Docker build for compile-time checks
 ENV DATABASE_URL=sqlite:.sqlx/temp.db
 
 RUN cargo build --release
@@ -223,6 +226,7 @@ FROM debian:buster-slim
 COPY --from=builder /usr/src/app/target/release/my-app /usr/local/bin/
 
 # Will be overridden at runtime with the real path
+# This is for the runtime database connection
 ENV DATABASE_URL=sqlite:/path/to/db
 
 CMD ["my-app"]

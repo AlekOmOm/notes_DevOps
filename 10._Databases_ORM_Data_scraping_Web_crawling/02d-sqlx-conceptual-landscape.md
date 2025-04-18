@@ -67,10 +67,10 @@ SQLx is *not* an ORM (like Objection.js or SQLAlchemy). It's a **Rust SQL toolki
   - Mount **volumes** (`-v /srv/data:/data_in_container`), linking a host directory to a container directory.
 
 **Bridging the Gap (The Solutions):**
-- **SQLx Offline Mode:** This is the key. You run `cargo sqlx prepare` *during development* against your dev DB. This creates `sqlx-data.json` (which *is* checked into git). During the Docker build (`cargo build`), you set `ENV SQLX_OFFLINE=true`. SQLx now uses `sqlx-data.json` for its compile-time checks instead of needing a live database connection. The build succeeds without needing the `.db` file.
+- **SQLx Offline Mode:** This is the key. You run `cargo sqlx prepare` *during development* against your dev DB. This creates a `.sqlx` directory (which *is* checked into git). During the Docker build (`cargo build`), you set `ENV SQLX_OFFLINE=true`. SQLx now uses the metadata in the `.sqlx` directory for its compile-time checks instead of needing a live database connection. The build succeeds without needing the `.db` file.
 - **Runtime Configuration:** When you run the container (`docker run`), you set the `DATABASE_URL` environment variable to point to the *actual* location of the database file *within the container's filesystem*, which is often mapped via a volume. E.g., `docker run -v /srv/data:/appdata -e DATABASE_URL="sqlite:/appdata/whoknows.db" your-image`. Your Rust code reads this `DATABASE_URL` at runtime to connect.
 
-**Philosophical Angle:** You decouple the **build-time schema validation** (using pre-generated, version-controlled metadata - `sqlx-data.json`) from the **runtime database connection** (using environment variables and volumes pointing to the live data). Docker facilitates this separation between the static build artifact (image) and the dynamic runtime environment (container).
+**Philosophical Angle:** You decouple the **build-time schema validation** (using pre-generated, version-controlled metadata - the `.sqlx` directory) from the **runtime database connection** (using environment variables and volumes pointing to the live data). Docker facilitates this separation between the static build artifact (image) and the dynamic runtime environment (container).
 
 ## SQLx in Docker with PostgreSQL
 
@@ -81,7 +81,7 @@ SQLx is *not* an ORM (like Objection.js or SQLAlchemy). It's a **Rust SQL toolki
 **Docker's Role:** Similar to SQLite, but network connectivity becomes central.
 
 **Image Build:**
-- **Option 1 (Offline Mode):** Same as SQLite. Generate `sqlx-data.json` against a dev PostgreSQL DB, commit it, build with `SQLX_OFFLINE=true`. This is often the simplest for CI.
+- **Option 1 (Offline Mode):** Same as SQLite. Generate the `.sqlx` directory against a dev PostgreSQL DB, commit it, build with `SQLX_OFFLINE=true`. This is often the simplest for CI.
 - **Option 2 (Live DB during Build):** You *could* have the Docker build connect to a *real* PostgreSQL instance (maybe a temporary one spun up just for the build in CI, or a shared dev instance). `DATABASE_URL` would be `postgres://user:pass@host:port/db`. This avoids `sqlx-data.json` but requires network access during build.
 
 **Container Runtime:**
@@ -97,7 +97,7 @@ SQLx provides compile-time safety by checking queries against a database schema 
 - For **SQLite** (file-based), the challenge involves the physical absence of the `.db` file during build and configuring the correct file path at runtime.
 - For **PostgreSQL** (network-based), the challenge involves network accessibility to a database server during build and configuring the correct connection string at runtime.
 
-The **SQLx offline mode** (`sqlx-data.json` + `SQLX_OFFLINE=true`) is the primary conceptual bridge, allowing builds to complete using pre-generated, version-controlled metadata, thus decoupling the build process from the need for a live database connection. Docker then handles the runtime configuration via environment variables and potentially volumes (especially for SQLite).
+The **SQLx offline mode** (generating the `.sqlx` directory via 'prepare' + `SQLX_OFFLINE=true`) is the primary conceptual bridge, allowing builds to complete using pre-generated, version-controlled metadata, thus decoupling the build process from the need for a live database connection. Docker then handles the runtime configuration via environment variables and potentially volumes (especially for SQLite).
 
 Understanding this build-time vs. runtime separation and how offline mode bridges it is key to using SQLx effectively in Dockerized CI/CD pipelines.
 

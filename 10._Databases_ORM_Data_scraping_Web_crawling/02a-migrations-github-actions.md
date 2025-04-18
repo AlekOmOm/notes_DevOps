@@ -1,6 +1,7 @@
 # 2a. Migrations with GitHub Actions 🔄
 
-[<- Back to Migrations](./02-migrations.md) | [Next: Database Schema Version Control ->](./02b-database-schema-version-control.md)
+[<- Back to Database ORM](./01-database-orm.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
+
 
 ## Table of Contents
 - [Why GitHub Actions for Migrations](#why-github-actions-for-migrations)

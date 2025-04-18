@@ -2,12 +2,24 @@
 
 [<- Back to Database ORM](./01-database-orm.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
+subnote(s): 
+- [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
+- [02b - Dockerfile Rust sqlx](./02b-docker-rust-sqlx.md)
+
 ## Table of Contents
-- [What is a Migration?](#what-is-a-migration)
-- [Types of Migrations](#types-of-migrations)
-- [Migration Benefits](#migration-benefits)
-- [Practical Migration with Knex.js](#practical-migration-with-knexjs)
-- [Data Migration: Seeding](#data-migration-seeding)
+- [2. Migrations 📝](#2-migrations-)
+  - [Table of Contents](#table-of-contents)
+  - [What is a Migration?](#what-is-a-migration)
+  - [Types of Migrations](#types-of-migrations)
+    - [1. Schema Migration (DDL)](#1-schema-migration-ddl)
+    - [2. Data Migration / Seeding (DML)](#2-data-migration--seeding-dml)
+  - [Migration Benefits](#migration-benefits)
+  - [Practical Migration with Knex.js](#practical-migration-with-knexjs)
+    - [Setup Process](#setup-process)
+    - [Creating and Running Migrations](#creating-and-running-migrations)
+  - [Data Migration: Seeding](#data-migration-seeding)
+    - [Creating and Running Seeds with Knex](#creating-and-running-seeds-with-knex)
+    - [When to Use Seeding](#when-to-use-seeding)
 
 ## What is a Migration?
 
@@ -210,4 +222,4 @@ Seeding is the process of adding initial or test data to a database.
 
 ---
 
-[<- Back to Database ORM](./01-database-orm.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
+[<- Back to Database ORM](./01-database-orm.md) | [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)

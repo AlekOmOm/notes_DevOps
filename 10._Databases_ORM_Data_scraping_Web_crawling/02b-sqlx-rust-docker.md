@@ -104,12 +104,13 @@ CMD ["my-app"]
 
 SQLx provides an offline mode that enables builds without a database connection:
 
-1. Generate a `sqlx-data.json` file in development:
+1. Generate SQLx query metadata in development (outputs to a .sqlx directory by default):
    ```bash
    cargo sqlx prepare --database-url "sqlite:./dev.db"
    ```
+   *(This command connects to the database and generates metadata files within a `.sqlx` directory in your project root.)*
 
-2. Commit this file to your repository to version your database schema expectations alongside your code
+2. Commit the generated .sqlx directory to your repository to version your database schema expectations alongside your code
 
 3. Set the `SQLX_OFFLINE=true` environment variable during builds:
    ```dockerfile
@@ -158,12 +159,13 @@ jobs:
       - name: Install SQLx CLI
         run: cargo install sqlx-cli
       
-      - name: Generate sqlx-data.json
+      - name: Generate SQLx offline metadata (.sqlx directory)
         run: |
           # Create an empty database for preparing SQLx
           mkdir -p .sqlx
           touch .sqlx/temp.db
-          DATABASE_URL=sqlite:.sqlx/temp.db cargo sqlx prepare --merged
+          # Note: Ensure DATABASE_URL points to a valid, migrated database for prepare
+          DATABASE_URL=sqlite:.sqlx/temp.db cargo sqlx prepare
       
       - name: Build Docker image
         env:

@@ -1,15 +1,26 @@
 # 2a. Migrations with GitHub Actions 🔄
 
-[<- Back to Database ORM](./01-database-orm.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
+[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) |  [Next: Backup Documentation ->](./03-backup-documentation.md)
 
+next: [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
 
+---
+- [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
+- [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
+- [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
+- [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+---
 ## Table of Contents
-- [Why GitHub Actions for Migrations](#why-github-actions-for-migrations)
-- [Setting Up Migration Workflows](#setting-up-migration-workflows)
-- [Environment Management](#environment-management)
-- [Migration Safety Checks](#migration-safety-checks)
-- [Rollback Automation](#rollback-automation)
-- [Complete Workflow Examples](#complete-workflow-examples)
+- [2a. Migrations with GitHub Actions 🔄](#2a-migrations-with-github-actions-)
+  - [Table of Contents](#table-of-contents)
+  - [Why GitHub Actions for Migrations](#why-github-actions-for-migrations)
+  - [Setting Up Migration Workflows](#setting-up-migration-workflows)
+    - [Basic Migration Workflow](#basic-migration-workflow)
+    - [Key Components:](#key-components)
+  - [Environment Management](#environment-management)
+    - [Environment Configuration:](#environment-configuration)
+  - [Migration Safety Checks](#migration-safety-checks)
+- [... previous workflow content ...](#-previous-workflow-content-)
 
 ## Why GitHub Actions for Migrations
 

@@ -1,6 +1,15 @@
 # 2c. SQLx CI/CD Workflow 🔄
 
-[<- Back to Docker with Rust and SQLx](./02b-docker-rust-sqlx.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
+[<- Back to Database ORM](./01-database-orm.md) | [Current: 02 - Migrations](./02-migrations.md) |  [Next: Backup Documentation ->](./03-backup-documentation.md)
+
+next: [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+
+---
+- [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
+- [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
+- [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
+- [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+---
 
 ## Table of Contents
 - [Introduction](#introduction)

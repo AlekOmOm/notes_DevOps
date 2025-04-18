@@ -2,9 +2,14 @@
 
 [<- Back to Database ORM](./01-database-orm.md) | [Next: Backup Documentation ->](./03-backup-documentation.md)
 
-subnote(s): 
+next: [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
+
+---
 - [02a - Migrations GitHub Actions](./02a-migrations-github-actions.md)
-- [02b - Dockerfile Rust sqlx](./02b-docker-rust-sqlx.md)
+- [02b - SQLx in Rust with Docker environment](./02b-sqlx-rust-docker.md)
+- [02c - SQLx for CI/CD](./02c-sqlx-for-ci-cd.md)
+- [02d - SQLx Conceptual landscape](./02d-sqlx-conceptual-landscape.md)
+---
 
 ## Table of Contents
 - [2. Migrations 📝](#2-migrations-)

@@ -41,17 +41,18 @@ This presents a fundamental challenge: *How do you build the application when th
 SQLx provides an elegant solution through "offline mode" which caches query metadata:
 
 ```bash
-# Generate metadata file during development
-cargo sqlx prepare --database-url "sqlite:./dev.db" --merged
+# Generate metadata in development
+# Connects to the DB and saves metadata in the .sqlx directory
+cargo sqlx prepare --database-url "sqlite:./dev.db"
 ```
 
-This command creates a `sqlx-data.json` file containing:
+This command creates a `.sqlx` directory containing metadata files with:
 - SQL query text
 - Parameter types
 - Result types
 - Database-specific metadata
 
-This file should be committed to your repository, enabling builds without a database connection. This file contains the metadata SQLx needs for offline compilation and should be committed to your repository to version your database schema expectations alongside your code.
+This `.sqlx` directory should be committed to your repository, enabling builds without a database connection. The directory contains the metadata SQLx needs for offline compilation and should be committed to your repository to version your database schema expectations alongside your code.
 
 ### Setting Up Your Project
 
@@ -66,6 +67,7 @@ This file should be committed to your repository, enabling builds without a data
      "offline"         # Important for CI/CD
    ]}
    ```
+   *(Note: While older versions required the `"offline"` feature flag, it might be enabled by default in recent SQLx versions (0.7+). Including it ensures compatibility.)*
 
 2. **Create a prepare script**:
    ```bash
@@ -79,16 +81,16 @@ This file should be committed to your repository, enabling builds without a data
    # Run migrations to ensure schema is up-to-date
    cargo sqlx migrate run --database-url sqlite:.sqlx/dev.db
    
-   # Generate SQLx metadata file
-   cargo sqlx prepare --database-url sqlite:.sqlx/dev.db --merged
+   # Generate SQLx metadata
+   cargo sqlx prepare --database-url sqlite:.sqlx/dev.db
    
-   echo "SQLx metadata prepared for offline mode"
+   echo "SQLx metadata prepared (.sqlx directory generated)"
    ```
 
-3. **Add sqlx-data.json to version control**:
+3. **Add .sqlx directory to version control**:
    ```bash
-   git add sqlx-data.json
-   git commit -m "Add SQLx metadata for offline builds"
+   git add .sqlx
+   git commit -m "Add/Update SQLx offline build metadata"
    ```
 
 ## GitHub Actions Workflow
@@ -131,12 +133,12 @@ jobs:
         run: |
           echo "SQLX_OFFLINE=true" >> $GITHUB_ENV
       
-      # Verify that sqlx-data.json is up-to-date and present
+      # Verify that .sqlx directory is up-to-date and present
       - name: Verify SQLx metadata
         run: |
-          if [ ! -f sqlx-data.json ]; then
-            echo "Error: sqlx-data.json not found"
-            echo "Run 'cargo sqlx prepare' locally and commit the file"
+          if [ ! -d .sqlx ]; then
+            echo "Error: .sqlx directory not found"
+            echo "Run 'cargo sqlx prepare' locally and commit the .sqlx directory"
             exit 1
           fi
           
@@ -147,7 +149,7 @@ jobs:
           # Apply migrations to test database to create schema
           cargo sqlx migrate run --database-url sqlite:.sqlx/test.db
           
-          # Check if prepare would generate the same file
+          # Check if prepare would generate the same metadata in the .sqlx directory
           SQLX_DATABASE_URL=sqlite:.sqlx/test.db cargo sqlx prepare --check
       
       # Build the application
@@ -259,7 +261,7 @@ pub async fn create_pool() -> Result<AnyPool, sqlx::Error> {
 
 #### 1. "Database connection refused during build"
 
-**Problem**: Even with `sqlx-data.json`, you're getting database connection errors.
+**Problem**: Even with the `.sqlx` directory, you're getting database connection errors.
 
 **Solution**: Ensure `SQLX_OFFLINE=true` is set in your environment:
 ```bash
@@ -296,15 +298,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-#### 3. "Unable to find sqlx-data.json"
+#### 3. "Unable to find .sqlx directory or metadata"
 
-**Problem**: SQLx can't find the metadata file.
+**Problem**: SQLx can't find the `.sqlx` directory or required metadata within it.
 
-**Solution**: Check the working directory in your CI/CD pipeline and ensure the file is committed to git.
+**Solution**: Check the working directory in your CI/CD pipeline and ensure the `.sqlx` directory is committed to git.
 
 #### 4. "Mismatched SQLx metadata"
 
-**Problem**: Your queries have changed but `sqlx-data.json` wasn't updated.
+**Problem**: Your queries have changed but the `.sqlx` directory wasn't updated.
 
 **Solution**: Add a verification step in CI to ensure metadata is up-to-date:
 ```yaml
@@ -317,7 +319,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     mkdir -p .sqlx
     touch .sqlx/test.db
     
-    # Check if prepare would generate the same file
+    # Check if prepare would generate the same metadata in the .sqlx directory
     SQLX_DATABASE_URL=sqlite:.sqlx/test.db cargo sqlx prepare --check
 ```
 
@@ -379,7 +381,7 @@ volumes:
 Successfully integrating SQLx into CI/CD workflows requires understanding the unique challenges posed by compile-time query checking. By properly configuring offline mode and carefully managing database connections between build and runtime environments, you can maintain SQLx's safety benefits while enabling smooth automated deployments.
 
 The key takeaways are:
-1. Generate and commit `sqlx-data.json` for offline builds
+1. Generate and commit the `.sqlx` directory for offline builds
 2. Use environment variables to manage database connections
 3. Separate build-time and runtime database configurations 
 4. Ensure migrations run during deployment

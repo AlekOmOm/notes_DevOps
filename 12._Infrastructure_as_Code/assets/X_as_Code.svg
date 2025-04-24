@@ -1,0 +1,62 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f5f5f5" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle">X as Code</text>
+  
+  <!-- Central Circle -->
+  <circle cx="400" cy="250" r="170" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <text x="400" y="250" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle">Code</text>
+  
+  <!-- Infrastructure as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,-170 L120,-120 L120,-220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(80, -170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Infrastructure</text>
+  </g>
+  
+  <!-- Configuration as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,-170 L-120,-120 L-120,-220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(-80, -170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Configuration</text>
+  </g>
+  
+  <!-- Security as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,-170 L170,0 L120,-120 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(130, -60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Security</text>
+  </g>
+  
+  <!-- Policy as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,-170 L-170,0 L-120,-120 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(-130, -60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Policy</text>
+  </g>
+  
+  <!-- Pipeline as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,170 L120,120 L170,0 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(130, 60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Pipeline</text>
+  </g>
+  
+  <!-- Documentation as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,170 L-120,120 L-170,0 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(-130, 60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Documentation</text>
+  </g>
+  
+  <!-- Testing as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,170 L120,120 L120,220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(80, 170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Testing</text>
+  </g>
+  
+  <!-- Monitoring as Code -->
+  <g transform="translate(400, 250)">
+    <path d="M0,170 L-120,120 L-120,220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+    <text transform="translate(-80, 170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Monitoring</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="400" y="470" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">Everything defined as code brings software development principles to all aspects of IT</text>
+</svg>

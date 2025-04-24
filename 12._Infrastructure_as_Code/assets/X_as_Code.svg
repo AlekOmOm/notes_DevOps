@@ -1,62 +1,52 @@
-<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
-  <rect width="800" height="500" fill="#f5f5f5" rx="10" ry="10"/>
+  <rect width="900" height="600" fill="#f6f6f6" rx="10" ry="10"/>
   
   <!-- Title -->
-  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle">X as Code</text>
+  <text x="450" y="80" font-family="Arial, sans-serif" font-size="42" font-weight="bold" text-anchor="middle" fill="#333">X as Code</text>
   
-  <!-- Central Circle -->
-  <circle cx="400" cy="250" r="170" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
-  <text x="400" y="250" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle">Code</text>
+  <!-- Central Circle with "Code" label -->
+  <circle cx="450" cy="300" r="150" fill="#e6f3ff" stroke="#4d94ff" stroke-width="2"/>
+  <text x="450" y="310" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#333">Code</text>
   
-  <!-- Infrastructure as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,-170 L120,-120 L120,-220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(80, -170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Infrastructure</text>
-  </g>
+  <!-- Outer Octagon (connecting the segments) -->
+  <polygon points="450,150 570,190 650,300 570,410 450,450 330,410 250,300 330,190" 
+           fill="none" stroke="#4d94ff" stroke-width="1" stroke-dasharray="5,3"/>
   
-  <!-- Configuration as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,-170 L-120,-120 L-120,-220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(-80, -170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Configuration</text>
-  </g>
+  <!-- Configuration Segment -->
+  <line x1="450" y1="150" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="450" y="130" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Configuration</text>
   
-  <!-- Security as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,-170 L170,0 L120,-120 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(130, -60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Security</text>
-  </g>
+  <!-- Infrastructure Segment -->
+  <line x1="570" y1="190" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="590" y="170" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Infrastructure</text>
   
-  <!-- Policy as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,-170 L-170,0 L-120,-120 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(-130, -60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Policy</text>
-  </g>
+  <!-- Security Segment -->
+  <line x1="650" y1="300" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="690" y="305" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Security</text>
   
-  <!-- Pipeline as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,170 L120,120 L170,0 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(130, 60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Pipeline</text>
-  </g>
+  <!-- Pipeline Segment -->
+  <line x1="570" y1="410" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="590" y="440" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Pipeline</text>
   
-  <!-- Documentation as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,170 L-120,120 L-170,0 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(-130, 60)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Documentation</text>
-  </g>
+  <!-- Testing Segment -->
+  <line x1="450" y1="450" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="450" y="480" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Testing</text>
   
-  <!-- Testing as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,170 L120,120 L120,220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(80, 170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Testing</text>
-  </g>
+  <!-- Monitoring Segment -->
+  <line x1="330" y1="410" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="310" y="440" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Monitoring</text>
   
-  <!-- Monitoring as Code -->
-  <g transform="translate(400, 250)">
-    <path d="M0,170 L-120,120 L-120,220 Z" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
-    <text transform="translate(-80, 170)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Monitoring</text>
-  </g>
+  <!-- Policy Segment -->
+  <line x1="250" y1="300" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="210" y="305" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Policy</text>
+  
+  <!-- Documentation Segment -->
+  <line x1="330" y1="190" x2="450" y2="300" stroke="#4d94ff" stroke-width="1.5"/>
+  <text x="310" y="170" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#333">Documentation</text>
   
   <!-- Footer -->
-  <text x="400" y="470" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">Everything defined as code brings software development principles to all aspects of IT</text>
+  <text x="450" y="550" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#555">
+    Everything defined as code brings software development principles to all aspects of IT
+  </text>
 </svg>

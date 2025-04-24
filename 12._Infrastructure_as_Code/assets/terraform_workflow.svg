@@ -35,11 +35,15 @@
   <line x1="775" y1="290" x2="775" y2="340" stroke="#777" stroke-width="3" stroke-dasharray="5,3"/>
   <polygon points="770,330 775,350 780,330" fill="#777"/>
   
-  <!-- Commands Box -->
-  <rect x="175" y="350" width="450" height="80" rx="5" ry="5" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <!-- Commands Box with Fixed Layout -->
+  <rect x="175" y="350" width="450" height="100" rx="5" ry="5" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
   <text x="195" y="375" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">Commands:</text>
-  <text x="195" y="400" font-family="Arial, sans-serif" font-size="16" fill="#555">Write: terraform init, terraform fmt, terraform validate</text>
-  <text x="195" y="420" font-family="Arial, sans-serif" font-size="16" fill="#555">Plan: terraform plan</text>
-  <text x="380" y="400" font-family="Arial, sans-serif" font-size="16" fill="#555">Apply: terraform apply</text>
-  <text x="380" y="420" font-family="Arial, sans-serif" font-size="16" fill="#555">Destroy: terraform destroy</text>
+
+  <!-- Left Column -->
+  <text x="210" y="400" font-family="Arial, sans-serif" font-size="14" fill="#555">Write: terraform init, fmt, validate</text>
+  <text x="210" y="425" font-family="Arial, sans-serif" font-size="14" fill="#555">Plan: terraform plan</text>
+  
+  <!-- Right Column -->
+  <text x="450" y="400" font-family="Arial, sans-serif" font-size="14" fill="#555">Apply: terraform apply</text>
+  <text x="450" y="425" font-family="Arial, sans-serif" font-size="14" fill="#555">Destroy: terraform destroy</text>
 </svg>

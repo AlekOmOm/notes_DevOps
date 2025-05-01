@@ -1,0 +1,3090 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark background for the body */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Full-Width Slideshow Container */
+#slideshow {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+/* Full-Width and Dark Mode Slide Styles */
+.remark-slide-content {
+    color: #ddd; /* Light text color for readability */
+    background-color: #13151a; /* Dark background for slides */
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    padding-top: 0px;
+    box-sizing: border-box;
+}
+
+/* Headers */
+.remark-slide-content h1, .remark-slide-content h2 {
+    color: rgb(8, 107, 194); /* Bright color for headers */
+    margin-top: 5px;
+}
+
+.remark-slide-content h1 {
+    font-size: 2em;
+}
+
+.remark-slide-content h2 {
+    font-size: 1.2em;
+}
+
+/* Paragraphs */
+.remark-slide-content p {
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+/* Lists */
+.remark-slide-content ul, .remark-slide-content ol {
+    margin-left: 20px;
+    font-size: 1.2em;
+}
+
+/* Nested Lists */
+.remark-slide-content ul ul,
+.remark-slide-content ol ol,
+.remark-slide-content ul ol,
+.remark-slide-content ol ul {
+    font-size: 1em;
+}
+
+/* Images */
+.remark-slide-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+}
+
+/* Links */
+a:link, a:visited {
+	color: #00f;
+	background-color: #8e8c8c20;
+	padding: 2px 5px;
+	border-radius: 5px;
+}
+
+.remark-slide-content code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #333;
+    padding: 2px 5px;
+    color: #eee;
+}
+
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    color: #ddd;
+}
+
+th, td {
+    padding: 10px 15px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+th {
+    background-color: #2b2b2b;
+    color: #ddd;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #1e1e1e;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #292929;
+}
+
+.title-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+}
+
+.title-card h1 {
+    color: cyan;
+}
+
+.exercise-card h1 {
+    color: green;
+}
+
+.fullscreen-video {
+    width: 40vw; 
+    height: 50vh;
+    border: none;
+}
+
+.pro-bullet-item {
+    color: green;
+}
+
+.con-bullet-item {
+    color: rgb(215, 15, 15);
+}
+
+blockquote {
+    border-left: 4px solid #007BFF;
+    padding-left: 16px;
+    font-style: italic;
+    margin: 16px 0;
+}
+  
+strong {
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000000;
+    background-color: grey;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+    </style>
+
+    <title>01-docker-to-pod || 01a-docker-to-pod-detailed || 02-orchestration-scaling || 02a-orchestration-scaling-detailed || 03-configuration-health-storage || 04-production-readiness</title>
+</head>
+<body>
+    <!-- The Remark.js container -->
+<textarea id="source" style="display:none;"># 1. From Docker to Your First Pod 🌟
+
+[<- Back: Main Note](./README.md) | [Next: Basic Two-Server Orchestration & Scaling ->](./02-orchestration-scaling.md)
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Key Concepts](#key-concepts)
+- [Prerequisites](#prerequisites)
+- [Setting Up Kubernetes Locally](#setting-up-kubernetes-locally)
+- [Interacting with Your Cluster](#interacting-with-your-cluster)
+- [Running Your First Application](#running-your-first-application)
+- [Cleaning Up](#cleaning-up)
+- [Summary](#summary)
+
+## Introduction
+
+Docker revolutionized how we package and run applications by introducing containerization. However, managing multiple containers across different environments introduces new challenges that Docker alone doesn't solve effectively. This is where Kubernetes comes in.
+
+This first stage bridges the gap between running individual Docker containers and orchestrating them with Kubernetes. We'll focus on running a simple, existing containerized application locally using Kubernetes' basic building blocks.
+
+## Key Concepts
+
+### Kubernetes (K8s)
+
+Kubernetes is an open-source platform designed to automate deploying, scaling, and operating containerized applications. It groups containers into logical units for easy management and discovery.
+
+### Minikube
+
+Minikube is a tool that runs a single-node Kubernetes cluster locally on your machine. It's perfect for learning Kubernetes or testing deployments locally before pushing to a production cluster.
+
+### kubectl
+
+kubectl is the command-line interface for interacting with Kubernetes clusters. It allows you to run commands against Kubernetes clusters to deploy applications, inspect resources, and view logs.
+
+### Pod
+
+The smallest deployable unit in Kubernetes. A Pod represents a single instance of a running process in a cluster and can contain one or more containers that share storage and network resources.
+
+### Deployment
+
+A Kubernetes resource that manages a replicated application, ensuring a specified number of pod "replicas" are running at any given time. Deployments also handle updating pods to new versions.
+
+### Service
+
+An abstract way to expose an application running on a set of Pods as a network service. Services enable communication between different parts of an application and provide stable endpoints.
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+- Basic understanding of Docker (images, containers, `docker run`, Docker Hub)
+- Comfortable with command-line/terminal usage
+- Basic awareness of virtual machines as compute resources
+- A computer with the following specifications:
+  - At least 2 CPU cores
+  - At least 2GB of free memory
+  - At least 20GB of free disk space
+  - Internet connection
+  - Container or virtual machine manager (Docker, Hyperkit, VirtualBox, etc.)
+
+## Setting Up Kubernetes Locally
+
+Let's install the necessary tools to run Kubernetes on your local machine.
+
+### Installing kubectl
+
+kubectl is the command-line tool you'll use to interact with your Kubernetes cluster.
+
+**macOS (using Homebrew):**
+```bash
+brew install kubectl
+```
+
+**Windows (using Chocolatey):**
+```powershell
+choco install kubernetes-cli
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install -y kubectl
+```
+
+Verify the installation:
+```bash
+kubectl version --client
+```
+
+### Installing Minikube
+
+Minikube is what creates and manages your local Kubernetes cluster.
+
+**macOS (using Homebrew):**
+```bash
+brew install minikube
+```
+
+**Windows (using Chocolatey):**
+```powershell
+choco install minikube
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+### Starting Your Cluster
+
+Now, let's start a Kubernetes cluster using Minikube:
+
+```bash
+minikube start --driver=docker
+```
+
+This command creates a virtual machine (or uses Docker containers directly) and installs Kubernetes on it. The `--driver` flag specifies which virtualization technology to use. Common options include `docker`, `hyperkit`, `virtualbox`, and `kvm2`, depending on your operating system.
+
+Verify that Minikube is running:
+
+```bash
+minikube status
+```
+
+You should see output indicating that Minikube is running, and the Kubernetes components are healthy:
+
+```
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+```
+
+## Interacting with Your Cluster
+
+Now that your cluster is running, let's explore it using kubectl.
+
+### Getting Cluster Information
+
+```bash
+kubectl cluster-info
+```
+
+This shows the addresses of the control plane and other services.
+
+### Viewing Nodes
+
+```bash
+kubectl get nodes
+```
+
+In Minikube, you'll see just one node (named `minikube`), which is both the control plane and worker node.
+
+### Exploring Namespaces
+
+Namespaces provide a way to divide cluster resources. Let's see what namespaces exist by default:
+
+```bash
+kubectl get namespaces
+```
+
+You'll see namespaces like `default`, `kube-system`, and `kube-public`. The `kube-system` namespace contains the components that make Kubernetes work.
+
+Let's see what's running in the `kube-system` namespace:
+
+```bash
+kubectl get pods -n kube-system
+```
+
+This shows the core Kubernetes components like `etcd`, `kube-apiserver`, and more, all running as pods.
+
+## Running Your First Application
+
+Now, let's deploy a simple application to your Kubernetes cluster. We'll use the official Nginx web server image from Docker Hub.
+
+### Creating a Deployment
+
+```bash
+kubectl create deployment nginx --image=nginx
+```
+
+This command creates a Deployment named "nginx" that runs the Nginx web server container. Let's see what happened:
+
+```bash
+kubectl get deployments
+```
+
+You should see your deployment listed. Now check the pods that were created:
+
+```bash
+kubectl get pods
+```
+
+You should see a pod with a name starting with "nginx-" followed by a random string.
+
+### Understanding What Happened
+
+When you created the Deployment:
+
+1. Kubernetes received the instruction to run one replica of the Nginx container
+2. The Deployment created a ReplicaSet to manage the pod(s)
+3. The ReplicaSet created the pod
+4. Kubernetes scheduled the pod on an available node (in our case, the only Minikube node)
+5. The container runtime (Docker) pulled the Nginx image and started the container
+
+### Getting More Details
+
+To see more details about your pod:
+
+```bash
+kubectl describe pod <pod-name>
+```
+
+Replace `<pod-name>` with the actual name of your pod (from `kubectl get pods`). This command shows detailed information including events, which can be helpful for troubleshooting.
+
+### Exposing Your Application
+
+The Nginx pod is running, but it's not accessible from outside the cluster yet. Let's expose it using a Service:
+
+```bash
+kubectl expose deployment nginx --port=80 --type=NodePort
+```
+
+This creates a Service that exposes the Nginx deployment on port 80 using a NodePort, which makes it accessible from outside the cluster.
+
+Let's see the service:
+
+```bash
+kubectl get services
+```
+
+To access the Nginx web server, we need to find out what port Minikube mapped to port 80:
+
+```bash
+minikube service nginx --url
+```
+
+This command returns a URL that you can open in your browser to see the Nginx welcome page.
+
+Alternatively, you can just run:
+
+```bash
+minikube service nginx
+```
+
+This will automatically open your default browser to the service URL.
+
+## Cleaning Up
+
+When you're done experimenting, you can clean up the resources you created:
+
+```bash
+# Delete the service
+kubectl delete service nginx
+
+# Delete the deployment
+kubectl delete deployment nginx
+
+# Or delete everything in the default namespace
+kubectl delete all --all
+```
+
+To stop Minikube when you're done using it:
+
+```bash
+minikube stop
+```
+
+This stops the Minikube virtual machine but preserves its state. If you want to delete the Minikube VM completely:
+
+```bash
+minikube delete
+```
+
+## Summary
+
+In this first stage, you've successfully:
+
+1. Set up a local Kubernetes environment using Minikube
+2. Learned basic kubectl commands to interact with your cluster
+3. Deployed your first application (Nginx) to Kubernetes using a Deployment
+4. Exposed your application using a Service
+5. Accessed your application through the browser
+
+You've made the crucial transition from thinking in terms of individual containers to Kubernetes objects like Deployments, Pods, and Services. This provides the foundation for the more advanced concepts we'll explore in the next stages.
+
+Key takeaways:
+- Kubernetes uses Controllers (like Deployments) to manage applications
+- Pods are the basic unit of deployment in Kubernetes
+- Services expose applications running in pods
+- kubectl is your primary tool for interacting with Kubernetes
+
+In the next stage, we'll explore multi-instance deployment, scaling, and introduce declarative configuration using YAML.
+
+---
+
+[<- Back: Main Note](./README.md) | [Next: Basic Two-Server Orchestration & Scaling ->](./02-orchestration-scaling.md)
+
+
+---
+
+# 1a. From Docker to Your First Pod - Detailed Guide 🐳
+
+[<- Back: Main Topic](./01-docker-to-pod.md) | [Next Sub-Topic: Basic Orchestration & Scaling ->](./02-orchestration-scaling.md)
+
+## Overview
+
+This detailed sub-note provides hands-on instructions for the most basic Kubernetes workflow: setting up a local environment, deploying your first containerized application, and accessing it from your machine. This guide bridges the gap between running individual Docker containers and orchestrating them with Kubernetes.
+
+## Key Concepts
+
+### From Docker to Kubernetes
+
+Docker helps you package applications into containers, but managing multiple containers at scale requires orchestration. Kubernetes provides this orchestration layer, handling deployment, scaling, and management of containerized applications.
+
+```
+Docker Run                 Kubernetes
++-------------+            +------------------------+
+| docker run  |  evolves   | kubectl create         |
+| nginx       |  ------->  | deployment nginx       |
++-------------+            +------------------------+
+```
+
+### Core Tools
+
+- **kubectl**: The command-line interface for any Kubernetes cluster
+- **Minikube**: A tool that creates a single-node Kubernetes cluster locally for development and learning
+
+## Implementation Steps
+
+### 1. Installation
+
+Before you can start working with Kubernetes, you need to install the necessary tools:
+
+#### Installing kubectl
+
+Follow the official documentation for your operating system:
+
+**macOS (using Homebrew):**
+```bash
+brew install kubectl
+```
+
+**Windows (using Chocolatey):**
+```bash
+choco install kubernetes-cli
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install -y kubectl
+```
+
+#### Installing Minikube
+
+Follow the official Minikube documentation:
+
+**macOS (using Homebrew):**
+```bash
+brew install minikube
+```
+
+**Windows (using Chocolatey):**
+```bash
+choco install minikube
+```
+
+**Linux (download binary):**
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+#### Verify Installation
+
+Open a new terminal window and run:
+```bash
+kubectl version --client
+minikube version
+```
+
+You should see version information for both tools.
+
+### 2. Starting Your Local Kubernetes Cluster
+
+Minikube needs a "driver" to create the cluster environment. Since you already have Docker, we'll use that:
+
+```bash
+minikube start --driver=docker
+```
+
+This might take a few minutes the first time as it downloads necessary images. It will also automatically configure `kubectl` to talk to this new Minikube cluster.
+
+Check the cluster status:
+```bash
+minikube status
+```
+
+You should see output indicating the `host`, `kubelet`, and `apiserver` are all `Running`.
+
+### 3. Interacting with Your Cluster
+
+Now that your cluster is running, let's explore it using `kubectl`:
+
+#### Get Cluster Information
+
+```bash
+kubectl cluster-info
+```
+
+This shows basic information about the control plane and services.
+
+#### List Nodes
+
+```bash
+kubectl get nodes
+```
+
+You'll see one node named `minikube`, its status (`Ready`), role (`control-plane,master`), and age.
+
+#### Check Initial Pods
+
+```bash
+kubectl get pods
+```
+
+You should see "No resources found in default namespace." There are system pods running in other namespaces like `kube-system`, but we'll focus on the default namespace for now.
+
+### 4. Running Your First Application
+
+We'll deploy the standard Nginx web server image from Docker Hub:
+
+#### Create a Deployment
+
+```bash
+kubectl create deployment my-nginx --image=nginx
+```
+
+A Deployment tells Kubernetes how to create and update instances of your application. This command tells Kubernetes to run one container using the Nginx image.
+
+Check the deployment:
+```bash
+kubectl get deployments
+```
+
+You should see `my-nginx` listed, likely showing `1/1` under `READY`.
+
+#### Check the Pod
+
+```bash
+kubectl get pods
+```
+
+You'll see a pod named something like `my-nginx-xxxxxxxxxx-yyyyy`. Its `STATUS` should become `Running`. Kubernetes ensures this pod stays running.
+
+#### Expose the Deployment
+
+Right now, Nginx is running inside the cluster, but you can't access it from your browser. We need to expose it using a Service:
+
+```bash
+kubectl expose deployment my-nginx --type=NodePort --port=80
+```
+
+This creates a Service that makes your deployment accessible outside the cluster. The `NodePort` type exposes the Service on a port on each Node in the cluster.
+
+#### Find the Access URL
+
+```bash
+minikube service my-nginx --url
+```
+
+This outputs a URL like `http://192.168.49.2:3XXXX`. The IP address and port number will vary.
+
+#### Access Your Application
+
+Copy the URL and paste it into your browser. You should see the "Welcome to nginx!" page. Congratulations, you've deployed and accessed your first application on Kubernetes!
+
+### 5. Clean Up
+
+It's good practice to remove resources when you're done:
+
+Delete the Service:
+```bash
+kubectl delete service my-nginx
+```
+
+Delete the Deployment (this will also delete the Pod it manages):
+```bash
+kubectl delete deployment my-nginx
+```
+
+Verify they're gone:
+```bash
+kubectl get services
+kubectl get deployments
+```
+
+Alternatively, you can quickly delete all resources in the current namespace:
+```bash
+kubectl delete all --all
+```
+
+## Common Challenges and Solutions
+
+### Challenge 1: Minikube Won't Start
+
+**Problem:** `minikube start` fails with driver-related errors.
+
+**Solution:**
+
+```bash
+# Make sure Docker is running
+docker ps
+
+# Try with a different driver if Docker isn't available
+minikube start --driver=virtualbox
+
+# Or check status and delete problematic cluster
+minikube status
+minikube delete
+minikube start --driver=docker
+```
+
+### Challenge 2: Can't Access the Application
+
+**Problem:** The URL from `minikube service` doesn't work.
+
+**Solution:**
+
+```bash
+# Check if the service exists
+kubectl get services
+
+# Check pod status to ensure it's running
+kubectl get pods
+
+# Try using port-forward as an alternative
+POD_NAME=$(kubectl get pods -l app=my-nginx -o jsonpath='{.items[0].metadata.name}')
+kubectl port-forward $POD_NAME 8080:80
+# Then access http://localhost:8080 in your browser
+```
+
+## Practical Example
+
+This example shows the complete workflow from start to finish:
+
+```bash
+# Start Minikube
+minikube start --driver=docker
+
+# Create a deployment
+kubectl create deployment hello-web --image=nginx
+
+# Wait for pod to be ready
+kubectl wait --for=condition=ready pod -l app=hello-web
+
+# Expose the application
+kubectl expose deployment hello-web --type=NodePort --port=80
+
+# Get the URL
+minikube service hello-web --url
+
+# (Open the URL in your browser)
+
+# Clean up
+kubectl delete service hello-web
+kubectl delete deployment hello-web
+```
+
+## Summary
+
+You've successfully:
+1. Set up a local Kubernetes environment using Minikube
+2. Learned basic kubectl commands to interact with your cluster
+3. Deployed an application (Nginx) to Kubernetes using a Deployment
+4. Exposed your application using a Service
+5. Accessed your application through the browser
+
+You've made the crucial transition from thinking in terms of individual containers to Kubernetes objects like Deployments, Pods, and Services. This provides the foundation for the more advanced concepts in the next stages.
+
+## Next Steps
+
+Now that you've deployed a single instance of an application, it's time to explore multi-instance deployment, scaling, and the declarative approach to Kubernetes configuration.
+
+---
+
+[<- Back: Main Topic](./01-docker-to-pod.md) | [Next Sub-Topic: Basic Orchestration & Scaling ->](./02-orchestration-scaling.md)
+
+
+---
+
+# 2. Basic Two-Server Orchestration & Scaling ⚡
+
+[<- Back: From Docker to Your First Pod](./01-docker-to-pod.md) | [Next: Configuration, Health & Storage ->](./03-configuration-health-storage.md)
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Key Concepts](#key-concepts)
+- [Prerequisites](#prerequisites)
+- [Scaling Applications](#scaling-applications)
+- [Internal Service Communication](#internal-service-communication)
+- [Understanding Rolling Updates](#understanding-rolling-updates)
+- [Moving to Declarative Configuration](#moving-to-declarative-configuration)
+- [Summary](#summary)
+
+## Introduction
+
+In this stage, we'll build on our basic Kubernetes knowledge to understand how it manages applications across multiple servers and handles scaling. Although we're still using a single-node Minikube cluster, the concepts we'll learn apply to multi-node production clusters.
+
+The ability to seamlessly scale applications and distribute them across multiple servers is one of Kubernetes' core strengths. We'll explore how Kubernetes abstracts away the underlying infrastructure, allowing you to focus on defining the desired state of your application rather than the mechanics of where and how it runs.
+
+## Key Concepts
+
+### Node
+
+A worker machine in Kubernetes, either a virtual machine or physical computer, where containers are deployed. Each node is managed by the control plane and contains the services necessary to run pods.
+
+### ReplicaSet
+
+Ensures that a specified number of pod replicas are running at any given time. If there are too many pods, the ReplicaSet will remove some; if there are too few, it will start more.
+
+### Scaling
+
+The process of adjusting the number of pod replicas to match demand or desired state. Kubernetes can scale applications horizontally (adding more pod instances) based on manual commands or automatic rules.
+
+### Service Types
+
+- **ClusterIP**: Exposes the service on an internal IP within the cluster. Only reachable from within the cluster.
+- **NodePort**: Exposes the service on each node's IP at a static port. Accessible from outside the cluster.
+- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer.
+- **ExternalName**: Maps the service to the contents of an ExternalName field by returning a CNAME record.
+
+### Rolling Updates
+
+Kubernetes' default method for updating applications, where it gradually replaces old pods with new ones, ensuring zero downtime if configured correctly.
+
+### Declarative Configuration
+
+Defining the desired state of resources using YAML files, rather than using imperative commands. This approach provides better version control, repeatability, and documentation.
+
+## Prerequisites
+
+- Completion of Stage 1 (From Docker to Your First Pod)
+- Minikube running on your local machine
+- Basic understanding of VMs (conceptualizing multiple machines)
+- Limited Terraform knowledge (understanding it can provision multiple VMs)
+
+## Scaling Applications
+
+In production, applications typically run multiple identical instances to provide redundancy and handle increased load. Let's explore how to scale an application in Kubernetes.
+
+### Deploy a Sample Application
+
+We'll use a simple web application for this exercise:
+
+```bash
+kubectl create deployment k8s-web-hello --image=andlocker/k8s-web-hello
+```
+
+Verify the deployment:
+
+```bash
+kubectl get deployments
+```
+
+Check the running pod:
+
+```bash
+kubectl get pods
+```
+
+You should see one pod running.
+
+### Scaling Up
+
+Now, let's scale the application to run multiple instances:
+
+```bash
+kubectl scale deployment k8s-web-hello --replicas=3
+```
+
+Check the pods again:
+
+```bash
+kubectl get pods
+```
+
+You should now see three pods running. Let's get more details about where they're running:
+
+```bash
+kubectl get pods -o wide
+```
+
+In a single-node Minikube environment, all pods run on the same node. However, in a multi-node cluster, Kubernetes would distribute these pods across available nodes based on resource availability and scheduling rules.
+
+### Simulating Multi-Node Behavior
+
+While we're using a single Minikube node, it's important to understand that in a real multi-node cluster:
+
+1. The Kubernetes scheduler would place pods across different nodes to distribute the load.
+2. If a node fails, the pods running on it would be rescheduled to other available nodes.
+3. The system automatically balances resource utilization across nodes.
+
+To visualize this better, we can use labels to simulate different "logical nodes" even within our single physical node:
+
+```bash
+# Let's label some of our pods to simulate them being on different nodes
+kubectl label pod $(kubectl get pods -l app=k8s-web-hello -o jsonpath='{.items[0].metadata.name}') node=node1
+kubectl label pod $(kubectl get pods -l app=k8s-web-hello -o jsonpath='{.items[1].metadata.name}') node=node2
+kubectl label pod $(kubectl get pods -l app=k8s-web-hello -o jsonpath='{.items[2].metadata.name}') node=node3
+
+# Now we can see our "logical" distribution
+kubectl get pods -L node
+```
+
+## Internal Service Communication
+
+In a microservices architecture, services need to communicate with each other within the cluster. Let's explore how this works using Kubernetes Services.
+
+### Creating an Internal Service
+
+Create an internal ClusterIP service for our application:
+
+```bash
+kubectl expose deployment k8s-web-hello --port=3000 --type=ClusterIP
+```
+
+Check the service:
+
+```bash
+kubectl get services
+```
+
+You'll see a ClusterIP service for k8s-web-hello with an internal IP address. This IP is only accessible within the cluster.
+
+### Testing Internal Communication
+
+To verify that our service works and load balances requests across the different pods, we'll create a temporary pod to send requests to our service:
+
+```bash
+kubectl run tmp-shell --rm -i --tty --image=ubuntu -- bash
+```
+
+Inside this temporary pod, install curl and test the service:
+
+```bash
+# Inside the tmp-shell container
+apt update
+apt install -y curl
+curl http://k8s-web-hello:3000
+```
+
+Run the curl command multiple times - you might notice subtle differences in the response as requests are load-balanced across different pods.
+
+Type `exit` to leave the temporary pod and return to your terminal.
+
+## Understanding Rolling Updates
+
+When you update an application, Kubernetes performs a rolling update by default, gradually replacing old pods with new ones. Let's see this in action.
+
+### Updating the Deployment
+
+Let's update our deployment's image:
+
+```bash
+kubectl set image deployment/k8s-web-hello k8s-web-hello=andlocker/k8s-web-hello:latest
+```
+
+Watch the update process in real-time:
+
+```bash
+kubectl get pods -w
+```
+
+You'll see Kubernetes create new pods and terminate old ones in a controlled manner. This ensures that your application remains available during the update.
+
+Press Ctrl+C to stop watching.
+
+### Understanding Update Strategy
+
+Kubernetes uses a RollingUpdate strategy by default, which ensures:
+
+1. Application remains available (no downtime)
+2. Only a certain number of pods are updated at once (default: 25% unavailable, 25% surge)
+3. New pods are only considered ready when they pass readiness checks
+
+You can view the update strategy for your deployment:
+
+```bash
+kubectl describe deployment k8s-web-hello
+```
+
+Look for the "Strategy" field in the output. It should say "RollingUpdate".
+
+## Moving to Declarative Configuration
+
+So far, we've been using imperative commands (`create`, `scale`, `set`). Now, let's move to the declarative approach using YAML files, which is the recommended way to manage Kubernetes resources.
+
+### Exporting Current Configuration
+
+First, let's export our current deployment configuration to a YAML file:
+
+```bash
+kubectl get deployment k8s-web-hello -o yaml > deployment.yaml
+```
+
+Open this file in a text editor. You'll see it contains many fields, including some status information and auto-generated fields. In practice, you'd create a simpler version with only the required fields.
+
+### Simplifying the YAML
+
+Let's create a simplified version of our deployment YAML. Create a new file called `simple-deployment.yaml` with the following content:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:latest
+        ports:
+        - containerPort: 3000
+```
+
+This simplified version includes:
+- The API version and kind of resource
+- Metadata (name)
+- Spec, which includes:
+  - Number of replicas
+  - Selector to identify which pods are part of this deployment
+  - Pod template, which defines the pods to be created
+
+### Applying Declarative Configuration
+
+Let's delete our current deployment and recreate it using our YAML file:
+
+```bash
+# Delete the current deployment
+kubectl delete deployment k8s-web-hello
+
+# Apply the YAML file
+kubectl apply -f simple-deployment.yaml
+```
+
+Verify that the deployment is running:
+
+```bash
+kubectl get deployments
+kubectl get pods
+```
+
+### Creating a Service in YAML
+
+Now, let's create a YAML file for our service. Create a file called `service.yaml` with the following content:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+Apply the service configuration:
+
+```bash
+kubectl apply -f service.yaml
+```
+
+Verify that the service is running:
+
+```bash
+kubectl get services
+```
+
+### Benefits of Declarative Configuration
+
+Using YAML files for configuration provides several benefits:
+
+1. **Version Control**: You can store your configuration in a Git repository.
+2. **Documentation**: The YAML files serve as documentation of your infrastructure.
+3. **Repeatability**: You can easily recreate the same environment in different clusters.
+4. **Validation**: You can validate the configuration before applying it.
+5. **Templating**: You can use tools like Helm to template your configuration.
+
+## Summary
+
+In this stage, you've learned:
+
+1. How to scale applications by increasing the number of pod replicas.
+2. How Kubernetes distributes pods across nodes (simulated in our single-node environment).
+3. How to use ClusterIP services for internal communication between pods.
+4. How Kubernetes performs rolling updates to ensure zero downtime.
+5. How to move from imperative commands to declarative YAML configuration.
+
+These concepts form the foundation of orchestration and scaling in Kubernetes. While we've been working with a single-node cluster, the principles apply equally to multi-node production environments.
+
+Key takeaways:
+- Kubernetes handles the distribution of pods across nodes, abstracting away the underlying infrastructure.
+- Services provide a stable endpoint for communication, regardless of how many pods are running or where they're located.
+- Declarative configuration with YAML files is the preferred approach for managing Kubernetes resources.
+
+In the next stage, we'll explore more advanced topics including ConfigMaps for configuration, health checks with probes, and persistent storage.
+
+---
+
+[<- Back: From Docker to Your First Pod](./01-docker-to-pod.md) | [Next: Configuration, Health & Storage ->](./03-configuration-health-storage.md)
+
+
+---
+
+# 2a. Basic Orchestration & Scaling - Detailed Guide 🔄
+
+[<- Back: Docker to Your First Pod](./02-orchestration-scaling.md) | [Next: Configuration, Health & Storage ->](./03-configuration-health-storage.md)
+
+## Overview
+
+This detailed sub-note expands on basic Kubernetes concepts by diving into how Kubernetes handles multiple instances of your application, performs rolling updates, and introduces the declarative approach to resource management using YAML files. It builds upon the foundations established in Stage 1.
+
+## Key Concepts
+
+### Nodes and Replicas
+
+In a production Kubernetes cluster, your applications run across multiple physical or virtual machines called "nodes." When you deploy multiple copies (replicas) of your application, Kubernetes distributes them across these nodes for better fault tolerance and load distribution.
+
+### Scaling
+
+Scaling refers to adjusting the number of running instances of your application to meet demand. Kubernetes makes it easy to scale applications up or down without downtime.
+
+### Rolling Updates
+
+When you need to update your application, Kubernetes can perform rolling updates, gradually replacing old pods with new ones to ensure zero downtime.
+
+### Declarative Configuration
+
+Instead of using imperative commands to tell Kubernetes what to do step-by-step, the declarative approach involves defining the desired state in YAML files, letting Kubernetes figure out how to achieve that state.
+
+## Implementation Steps
+
+### 1. Understanding Nodes and Replicas
+
+While Minikube provides only a single-node cluster for local development, the concepts of scaling and pod distribution still apply:
+
+Check your cluster's nodes:
+```bash
+kubectl get nodes
+```
+
+You'll only see one node named `minikube`. In a real cluster (like AKS on Azure), you'd see multiple nodes, and Kubernetes would automatically spread your application pods across them.
+
+### 2. Deploying and Scaling an Application
+
+Let's deploy a sample Node.js application and scale it to multiple replicas:
+
+#### Create the Deployment
+
+```bash
+kubectl create deployment hello-app --image=andlocker/k8s-web-hello
+```
+
+Verify the deployment:
+```bash
+kubectl get deployments hello-app
+```
+
+Check the pod:
+```bash
+kubectl get pods -l app=hello-app
+```
+
+You should see one pod running.
+
+#### Scale Up to Multiple Replicas
+
+Now, let's tell Kubernetes to run three copies of our application:
+
+```bash
+kubectl scale deployment hello-app --replicas=3
+```
+
+Verify the scaling:
+```bash
+kubectl get pods -l app=hello-app
+```
+
+You should now see three pods running, all with similar names starting with `hello-app-`.
+
+#### View Node Assignment
+
+To see which node each pod is running on:
+
+```bash
+kubectl get pods -l app=hello-app -o wide
+```
+
+In Minikube, all pods will show the same `minikube` node. In a multi-node cluster, you'd see pods distributed across different nodes.
+
+### 3. Internal Service and Load Balancing
+
+When an application has multiple replicas, Kubernetes needs to distribute incoming requests across them. Let's create an internal service for this:
+
+#### Create a ClusterIP Service
+
+```bash
+kubectl expose deployment hello-app --port=3000 --target-port=3000 --type=ClusterIP --name=hello-service
+```
+
+This creates a service with an internal cluster IP that load-balances requests across all pods in the deployment.
+
+Check the service:
+```bash
+kubectl get service hello-service
+```
+
+Note the `TYPE` is `ClusterIP` and there's a `CLUSTER-IP` listed (e.g., `10.100.x.x`).
+
+#### Test Internal Load Balancing
+
+Let's run a temporary pod inside the cluster to test the service:
+
+```bash
+kubectl run tmp-client --rm -i --tty --image=busybox -- sh
+```
+
+Once you get a shell prompt, run:
+```bash
+wget -qO- http://hello-service:3000
+```
+
+You should get a response from one of the pods. If you run this command multiple times, Kubernetes will distribute requests across all three pods.
+
+Type `exit` to leave the temporary pod.
+
+### 4. Performing a Rolling Update
+
+Kubernetes performs updates by gradually replacing old pods with new ones, ensuring zero downtime:
+
+#### Trigger an Update
+
+```bash
+kubectl set image deployment/hello-app hello-app=andlocker/k8s-web-hello:latest --record
+```
+
+The `--record` flag records this command in the revision history.
+
+#### Watch the Rolling Update Process
+
+```bash
+kubectl rollout status deployment/hello-app
+```
+
+In another terminal, you can see the pods being replaced:
+```bash
+kubectl get pods -l app=hello-app -w
+```
+
+You'll see new pods being created and old pods terminating one by one until all pods are running the new version.
+
+#### View Update History and Rollback (Optional)
+
+```bash
+# View revision history
+kubectl rollout history deployment/hello-app
+
+# Roll back to previous version
+kubectl rollout undo deployment/hello-app
+```
+
+### 5. Introduction to Declarative Management (YAML)
+
+The imperative commands we've been using are convenient for quick operations, but production Kubernetes deployments use the declarative approach with YAML files:
+
+#### Export Existing Deployment to YAML
+
+Let's see what the YAML for our deployment looks like:
+
+```bash
+kubectl get deployment hello-app -o yaml > hello-app-deployment.yaml
+```
+
+Open this file in a text editor. You'll see:
+- `apiVersion`: Kubernetes API version
+- `kind`: Type of resource (Deployment)
+- `metadata`: Name, labels, etc.
+- `spec`: The desired state, including:
+  - `replicas`: Number of pods to run
+  - `selector`: How to identify pods managed by this deployment
+  - `template`: Pod definition
+
+#### Simplify the YAML
+
+The exported YAML contains many auto-generated fields we don't need. Let's create a simplified version in a new file called `simple-deployment.yaml`:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      containers:
+      - name: hello-app
+        image: andlocker/k8s-web-hello
+        ports:
+        - containerPort: 3000
+```
+
+#### Apply the Declarative Configuration
+
+Delete the existing deployment:
+```bash
+kubectl delete deployment hello-app
+```
+
+Create it again using the YAML file:
+```bash
+kubectl apply -f simple-deployment.yaml
+```
+
+Verify it's running:
+```bash
+kubectl get deployments
+kubectl get pods -l app=hello-app
+```
+
+#### Create a Service in YAML
+
+Let's also define our service declaratively. Create a file called `service.yaml`:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+spec:
+  selector:
+    app: hello-app
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+Apply the service configuration:
+```bash
+kubectl apply -f service.yaml
+```
+
+#### Combine Resources in a Single File
+
+For simpler management, you can define multiple resources in a single YAML file separated by `---`. Create a file called `combined.yaml`:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      containers:
+      - name: hello-app
+        image: andlocker/k8s-web-hello
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+spec:
+  selector:
+    app: hello-app
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+Apply both resources at once:
+```bash
+kubectl apply -f combined.yaml
+```
+
+### 6. Clean Up
+
+When you're done experimenting, clean up the resources:
+
+```bash
+# Delete resources using YAML file
+kubectl delete -f combined.yaml
+
+# Or delete everything
+kubectl delete all --all
+```
+
+## Common Challenges and Solutions
+
+### Challenge 1: Pods Not Scheduling
+
+**Problem:** Pods stay in `Pending` state after scaling up.
+
+**Solution:**
+
+```bash
+# Check pod status details
+kubectl describe pod <pod-name>
+
+# Check node resource availability
+kubectl describe node minikube
+
+# Reduce resource requests if necessary by editing the deployment
+kubectl edit deployment hello-app
+```
+
+### Challenge 2: Rolling Update Stuck
+
+**Problem:** Rolling update doesn't complete.
+
+**Solution:**
+
+```bash
+# Check rollout status
+kubectl rollout status deployment/hello-app
+
+# Check events for errors
+kubectl get events
+
+# If necessary, force the rollout to continue
+kubectl rollout resume deployment/hello-app
+
+# Or abort and rollback
+kubectl rollout undo deployment/hello-app
+```
+
+## Practical Example
+
+This example shows how to deploy, scale, update, and finally convert to a declarative approach:
+
+```bash
+# Start with imperative commands
+kubectl create deployment web-app --image=nginx
+
+# Scale up
+kubectl scale deployment web-app --replicas=3
+
+# Expose internally
+kubectl expose deployment web-app --type=ClusterIP --port=80 --name=web-service
+
+# Update image
+kubectl set image deployment/web-app nginx=nginx:alpine
+
+# Export to YAML
+kubectl get deployment web-app -o yaml > web-app-deployment.yaml
+kubectl get service web-service -o yaml > web-app-service.yaml
+
+# Clean up imperative resources
+kubectl delete deployment web-app
+kubectl delete service web-service
+
+# Apply from YAML
+kubectl apply -f web-app-deployment.yaml
+kubectl apply -f web-app-service.yaml
+```
+
+## Summary
+
+In this stage, you've learned:
+
+1. How to scale an application to multiple replicas
+2. How Kubernetes distributes pods across nodes (conceptually, even in Minikube)
+3. How to create a Service for internal communication and load balancing
+4. How Kubernetes performs rolling updates for zero-downtime deployments
+5. How to move from imperative commands to declarative YAML files
+
+These skills form the foundation for more advanced Kubernetes concepts, such as configuration management, health checks, and persistent storage, which will be covered in the next stage.
+
+## Next Steps
+
+Now that you understand basic scaling and orchestration, you're ready to explore more advanced topics like:
+- Managing application configuration with ConfigMaps and Secrets
+- Implementing health checks with probes
+- Adding persistent storage with PersistentVolumes
+- Working with namespaces
+
+---
+
+[<- Back: Docker to Your First Pod](./02-orchestration-scaling.md) | [Next: Configuration, Health & Storage ->](./03-configuration-health-storage.md)
+
+
+---
+
+# 3. Intermediate: Configuration, Health & Storage 🔧
+
+[<- Back: Basic Two-Server Orchestration & Scaling](./02-orchestration-scaling.md) | [Next: Advanced Professional: Production Readiness ->](./04-production-readiness.md)
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Key Concepts](#key-concepts)
+- [Prerequisites](#prerequisites)
+- [Declarative Application Management](#declarative-application-management)
+- [Configuring Applications](#configuring-applications)
+- [Implementing Health Checks](#implementing-health-checks)
+- [Adding Persistent Storage](#adding-persistent-storage)
+- [Working with Namespaces](#working-with-namespaces)
+- [Manual Deployment Strategies](#manual-deployment-strategies)
+- [Summary](#summary)
+
+## Introduction
+
+As we progress in our Kubernetes journey, we need to address more sophisticated requirements for running applications in production. This includes managing application configuration, ensuring application health, persisting data beyond the lifecycle of pods, and implementing more advanced deployment patterns.
+
+In this stage, we'll build upon our basic Kubernetes skills to implement these intermediate concepts, bringing us closer to a production-ready setup. We'll continue to use Minikube for our local environment, but the patterns and practices we learn are directly applicable to production clusters.
+
+## Key Concepts
+
+### ConfigMap
+
+A Kubernetes resource that allows you to decouple configuration from container images. ConfigMaps store non-confidential configuration data as key-value pairs, which can be consumed by pods as environment variables, command-line arguments, or configuration files.
+
+### Secret
+
+Similar to ConfigMaps, but specifically designed for sensitive information such as passwords, tokens, or keys. Secrets are encoded (but not encrypted by default) and provide a way to handle sensitive data separately from application code.
+
+### Liveness Probe
+
+A health check that determines if a container is running properly. If the liveness probe fails, Kubernetes will restart the container to try to resolve the issue.
+
+### Readiness Probe
+
+A health check that determines if a container is ready to accept traffic. If the readiness probe fails, the container's IP address will be removed from the endpoints of any Services that match it, effectively taking it out of service rotation.
+
+### PersistentVolume (PV)
+
+A piece of storage in the cluster that has been provisioned by an administrator or dynamically provisioned using Storage Classes. It's a resource in the cluster just like a node.
+
+### PersistentVolumeClaim (PVC)
+
+A request for storage by a user. Claims can request specific size and access modes (e.g., ReadWriteOnce, ReadOnlyMany, or ReadWriteMany).
+
+### Namespace
+
+A virtual cluster within a Kubernetes cluster. Namespaces provide a way to divide cluster resources between multiple users, teams, or projects.
+
+## Prerequisites
+
+- Completion of Stage 2 (Basic Two-Server Orchestration & Scaling)
+- Comfort with Deployments, Services, Scaling, and basic YAML
+- Understanding of simple key-value configuration patterns
+- Minikube running on your local machine
+
+## Declarative Application Management
+
+Now that we're familiar with using YAML files for resources, let's create a more complete application definition that we'll use throughout this stage.
+
+### Combined Deployment and Service YAML
+
+Create a file named `deployment-service.yaml` with the following content:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+Notice that we've added resource requests and limits to our container specification. This is a best practice for production deployments as it helps Kubernetes make better scheduling decisions and prevents containers from consuming excessive resources.
+
+Apply this configuration:
+
+```bash
+kubectl apply -f deployment-service.yaml
+```
+
+Verify that both resources were created:
+
+```bash
+kubectl get deployments,services
+```
+
+## Configuring Applications
+
+Applications often require configuration that varies between environments (development, staging, production). Kubernetes provides ConfigMaps and Secrets for managing this configuration.
+
+### Creating a ConfigMap
+
+Let's create a ConfigMap to store some configuration for our application:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  greeting: "Hello from ConfigMap!"
+  log_level: "info"
+  feature_flags: "enable_feature_a=true,enable_feature_b=false"
+```
+
+Save this as `configmap.yaml` and apply it:
+
+```bash
+kubectl apply -f configmap.yaml
+```
+
+Verify the ConfigMap:
+
+```bash
+kubectl get configmaps
+kubectl describe configmap app-config
+```
+
+### Creating a Secret
+
+For sensitive information like API keys or passwords, use Secrets:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+data:
+  api_key: SGVsbG8gZnJvbSB0aGUgb3RoZXIgc2lkZSEK  # Base64 encoded "Hello from the other side!"
+```
+
+Save this as `secret.yaml` and apply it:
+
+```bash
+kubectl apply -f secret.yaml
+```
+
+Verify the Secret:
+
+```bash
+kubectl get secrets
+kubectl describe secret app-secrets
+```
+
+### Using ConfigMaps and Secrets in Pods
+
+Now let's update our deployment to use the ConfigMap and Secret. Modify the `deployment-service.yaml` file:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: GREETING
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: greeting
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: log_level
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: api_key
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: app-config
+---
+# Service definition remains the same
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+Apply the updated configuration:
+
+```bash
+kubectl apply -f deployment-service.yaml
+```
+
+Our application now has:
+1. Environment variables from ConfigMap (`GREETING` and `LOG_LEVEL`)
+2. Environment variable from Secret (`API_KEY`)
+3. A volume that mounts the entire ConfigMap as files under `/etc/config`
+
+### Verifying Configuration
+
+Let's check if our configuration is properly applied:
+
+```bash
+# Get one of the pod names
+POD_NAME=$(kubectl get pods -l app=k8s-web-hello -o jsonpath='{.items[0].metadata.name}')
+
+# Check environment variables
+kubectl exec $POD_NAME -- env | grep -E 'GREETING|LOG_LEVEL|API_KEY'
+
+# Check mounted config files
+kubectl exec $POD_NAME -- ls -la /etc/config
+kubectl exec $POD_NAME -- cat /etc/config/greeting
+```
+
+## Implementing Health Checks
+
+Health checks are crucial for ensuring the reliability of your applications. Kubernetes provides liveness and readiness probes to monitor container health.
+
+### Adding Probes to the Deployment
+
+Let's modify our deployment to include health checks. Update the container spec in `deployment-service.yaml`:
+
+```yaml
+containers:
+- name: k8s-web-hello
+  image: andlocker/k8s-web-hello:latest
+  ports:
+  - containerPort: 3000
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "100m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /readyz
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+  env:
+  # Environment variables remain the same
+```
+
+> **Note**: The `/healthz` and `/readyz` endpoints are common conventions for health check endpoints. Your actual application needs to implement these endpoints for the probes to work correctly.
+
+Apply the updated configuration:
+
+```bash
+kubectl apply -f deployment-service.yaml
+```
+
+### Understanding Probe Types
+
+- **Liveness Probe**: Determines if a container is running properly. If this fails, Kubernetes will restart the container.
+- **Readiness Probe**: Determines if a container is ready to receive traffic. If this fails, the container will be removed from service endpoints.
+- **Startup Probe** (not shown above): Determines if an application has started. This is useful for slow-starting containers.
+
+### Probe Implementation Methods
+
+Kubernetes supports several ways to implement probes:
+
+1. **HTTP GET**: Performs an HTTP GET request to a specified path and port
+2. **TCP Socket**: Attempts to establish a TCP connection to a specified port
+3. **Exec**: Executes a command inside the container
+
+### Checking Probe Status
+
+To see the status of your probes:
+
+```bash
+kubectl describe pod $POD_NAME
+```
+
+Look for the "Conditions" section, which shows the "Ready" condition, and the "Events" section, which will show probe failures if any.
+
+## Adding Persistent Storage
+
+By default, containers in Kubernetes are ephemeral - when a pod is deleted or replaced, all data inside the container is lost. For applications that need to persist data, Kubernetes provides PersistentVolumes and PersistentVolumeClaims.
+
+### Creating a PersistentVolumeClaim
+
+Create a file named `pvc.yaml`:
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+Apply the PVC:
+
+```bash
+kubectl apply -f pvc.yaml
+```
+
+Verify that the PVC is created and bound:
+
+```bash
+kubectl get pvc
+```
+
+When using Minikube, a PersistentVolume is automatically created and bound to your PVC. In a production environment, the PV would be provisioned according to your storage class configuration.
+
+### Using the PVC in a Deployment
+
+Let's update our deployment to use the PVC. Add volumes and volume mounts to the container spec in `deployment-service.yaml`:
+
+```yaml
+spec:
+  # ... other specs remain the same
+  template:
+    # ... metadata remains the same
+    spec:
+      containers:
+      - name: k8s-web-hello
+        # ... other container specs remain the same
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+        - name: data-volume
+          mountPath: /data
+      volumes:
+      - name: config-volume
+        configMap:
+          name: app-config
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-pvc
+```
+
+Apply the updated configuration:
+
+```bash
+kubectl apply -f deployment-service.yaml
+```
+
+### Testing Data Persistence
+
+Let's test that our data truly persists across pod restarts:
+
+```bash
+# Write a file to the persistent volume
+kubectl exec $POD_NAME -- sh -c "echo 'This data will persist' > /data/test-file.txt"
+
+# Verify the file exists
+kubectl exec $POD_NAME -- cat /data/test-file.txt
+
+# Delete the pod (Kubernetes will create a new one)
+kubectl delete pod $POD_NAME
+
+# Find the name of the new pod
+NEW_POD_NAME=$(kubectl get pods -l app=k8s-web-hello -o jsonpath='{.items[0].metadata.name}')
+
+# Check if the file still exists in the new pod
+kubectl exec $NEW_POD_NAME -- cat /data/test-file.txt
+```
+
+You should see the file content "This data will persist" in the new pod, demonstrating that the data survived the pod recreation.
+
+## Working with Namespaces
+
+Namespaces provide a way to divide cluster resources between multiple users, teams, or projects. They're especially useful in shared clusters.
+
+### Creating a Namespace
+
+Let's create a namespace for a staging environment:
+
+```bash
+kubectl create namespace staging
+```
+
+Verify the namespace:
+
+```bash
+kubectl get namespaces
+```
+
+### Deploying to a Specific Namespace
+
+We can deploy our application to the staging namespace:
+
+```bash
+kubectl apply -f deployment-service.yaml -n staging
+```
+
+Now our application is running in both the default namespace and the staging namespace. Verify:
+
+```bash
+kubectl get pods
+kubectl get pods -n staging
+```
+
+### Working with Resources in a Namespace
+
+When working with resources in a specific namespace, you'll need to include the `-n` flag in your commands:
+
+```bash
+# List services in the staging namespace
+kubectl get services -n staging
+
+# Describe a pod in the staging namespace
+kubectl describe pod $(kubectl get pods -n staging -o jsonpath='{.items[0].metadata.name}') -n staging
+```
+
+Namespaces provide isolation for names, but not for network. By default, services in one namespace can communicate with services in another namespace using the full service name: `<service-name>.<namespace>.svc.cluster.local`.
+
+## Manual Deployment Strategies
+
+Now let's explore manual implementations of advanced deployment strategies.
+
+### Blue-Green Deployment
+
+Blue-Green deployment runs two identical environments, with only one serving production traffic at a time. Let's implement this:
+
+1. Create blue and green deployments:
+
+```yaml
+# blue-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+        version: blue
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:v1
+        ports:
+        - containerPort: 3000
+```
+
+```yaml
+# green-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+      version: green
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+        version: green
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:v2
+        ports:
+        - containerPort: 3000
+```
+
+2. Create a service that initially points to the blue deployment:
+
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello
+    version: blue
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+3. Apply the configurations:
+
+```bash
+kubectl apply -f blue-deployment.yaml
+kubectl apply -f green-deployment.yaml
+kubectl apply -f service.yaml
+```
+
+4. To switch traffic from blue to green, update the service selector:
+
+```yaml
+# service.yaml (updated)
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello
+    version: green  # Changed from 'blue' to 'green'
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+```bash
+kubectl apply -f service.yaml
+```
+
+### Canary Deployment
+
+Canary deployment gradually rolls out changes to a small subset of users. Let's implement a basic version:
+
+1. Deploy the stable version (v1) with multiple replicas:
+
+```yaml
+# stable-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello-stable
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+      version: stable
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+        version: stable
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:v1
+        ports:
+        - containerPort: 3000
+```
+
+2. Deploy the canary version (v2) with fewer replicas:
+
+```yaml
+# canary-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+        version: canary
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:v2
+        ports:
+        - containerPort: 3000
+```
+
+3. Create a service that selects pods from both deployments:
+
+```yaml
+# canary-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello  # Selects both stable and canary
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+```
+
+4. Apply the configurations:
+
+```bash
+kubectl apply -f stable-deployment.yaml
+kubectl apply -f canary-deployment.yaml
+kubectl apply -f canary-service.yaml
+```
+
+With this setup, approximately 25% of traffic (1 out of 4 pods) will go to the canary version. To increase the canary traffic, you can scale up the canary deployment:
+
+```bash
+kubectl scale deployment k8s-web-hello-canary --replicas=2
+```
+
+Now about 40% of traffic (2 out of 5 pods) will go to the canary version.
+
+## Summary
+
+In this stage, you've learned:
+
+1. How to manage application configuration using ConfigMaps and Secrets
+2. How to implement health checks with liveness and readiness probes
+3. How to persist data using PersistentVolumeClaims
+4. How to work with namespaces to organize and isolate resources
+5. How to manually implement blue-green and canary deployment strategies
+
+These intermediate concepts bring us closer to production-ready Kubernetes deployments. We've addressed key concerns like configuration management, application health, data persistence, and deployment strategies, which are essential for running reliable applications in production.
+
+Key takeaways:
+- Separate configuration from code using ConfigMaps and Secrets
+- Implement health checks to ensure application reliability
+- Use persistent storage for data that needs to survive pod restarts
+- Leverage namespaces for organizing and isolating resources
+- Implement advanced deployment strategies to reduce risk during updates
+
+In the next stage, we'll explore advanced professional topics including working with managed Kubernetes services, implementing CI/CD pipelines, and setting up monitoring and logging.
+
+---
+
+[<- Back: Basic Two-Server Orchestration & Scaling](./02-orchestration-scaling.md) | [Next: Advanced Professional: Production Readiness ->](./04-production-readiness.md)
+  
+
+---
+
+# 4. Advanced Professional: Production Readiness 🚀
+
+[<- Back: Configuration, Health & Storage](./03-configuration-health-storage.md) | [Next: Main Note ->](./README.md)
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Key Concepts](#key-concepts)
+- [Prerequisites](#prerequisites)
+- [Managed Kubernetes Services](#managed-kubernetes-services)
+- [Helm for Application Packaging](#helm-for-application-packaging)
+- [CI/CD Integration](#cicd-integration)
+- [GitOps Approaches](#gitops-approaches)
+- [Monitoring and Alerting](#monitoring-and-alerting)
+- [Logging and Observability](#logging-and-observability)
+- [Ingress and External Access](#ingress-and-external-access)
+- [Implementing Security Measures](#implementing-security-measures)
+- [Chaos Engineering for Resilience](#chaos-engineering-for-resilience)
+- [Defining Service Level Objectives](#defining-service-level-objectives)
+- [Summary](#summary)
+
+## Introduction
+
+In the final stage of our Kubernetes journey, we transition from a local development environment to a production-ready setup in the cloud. This stage introduces advanced professional concepts and tools that are essential for operating Kubernetes at scale in real-world scenarios.
+
+We'll explore managed Kubernetes services, application packaging, CI/CD integration, monitoring, logging, security, and resilience testing. These topics represent industry best practices for running reliable, secure, and observable Kubernetes applications.
+
+## Key Concepts
+
+### Managed Kubernetes Services
+
+Cloud provider-managed Kubernetes services like Azure Kubernetes Service (AKS), Google Kubernetes Engine (GKE), or Amazon Elastic Kubernetes Service (EKS) handle the management of the Kubernetes control plane, reducing operational complexity.
+
+### Helm
+
+Kubernetes package manager that helps you define, install, and upgrade even the most complex Kubernetes applications. Helm uses "charts" that contain pre-configured Kubernetes resources.
+
+### CI/CD Integration
+
+Continuous Integration and Continuous Deployment pipelines automate the building, testing, and deployment of applications to Kubernetes clusters.
+
+### GitOps
+
+An operational framework that takes DevOps best practices used for application development such as version control, collaboration, compliance, and CI/CD, and applies them to infrastructure automation.
+
+### Monitoring and Alerting
+
+Systems to collect, store, and visualize metrics from Kubernetes clusters and applications, and to alert operators when issues arise.
+
+### Logging and Observability
+
+Tools to collect, aggregate, and search logs from all components in a Kubernetes cluster, as well as to trace requests across distributed systems.
+
+### Ingress
+
+A Kubernetes resource that manages external access to services in a cluster, typically HTTP/HTTPS routing.
+
+### Security Measures
+
+Techniques and tools to secure Kubernetes clusters, including network policies, RBAC, and pod security policies.
+
+### Chaos Engineering
+
+The discipline of experimenting on a system to build confidence in its capability to withstand turbulent conditions in production.
+
+### Service Level Objectives (SLOs)
+
+Targets for the reliability and performance of a service, often expressed as metrics like availability percentage or latency.
+
+## Prerequisites
+
+- Completion of Stage 3 (Configuration, Health & Storage)
+- Basic understanding of CI/CD concepts
+- Familiarity with cloud provider basics (e.g., Azure, AWS, GCP)
+- More robust Terraform knowledge (ability to provision cloud resources)
+- Access to a cloud provider account (Azure used in examples)
+
+## Managed Kubernetes Services
+
+While Minikube is excellent for learning and development, production workloads typically run on managed Kubernetes services provided by cloud providers.
+
+### Azure Kubernetes Service (AKS)
+
+Azure Kubernetes Service (AKS) is Microsoft Azure's managed Kubernetes service. Let's see how to provision an AKS cluster using Terraform.
+
+Create a file named `main.tf` with the following content:
+
+```hcl
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "my-aks-rg"
+  location = "East US"
+}
+
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = "my-aks-cluster"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  dns_prefix          = "myakscluster"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 2
+    vm_size    = "Standard_DS2_v2"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    Environment = "Production"
+  }
+}
+
+output "kube_config" {
+  value = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive = true
+}
+```
+
+This Terraform configuration:
+1. Creates a resource group in Azure
+2. Provisions an AKS cluster with 2 nodes
+3. Outputs the kubeconfig file that allows kubectl to connect to the cluster
+
+To deploy the AKS cluster:
+
+```bash
+# Initialize Terraform
+terraform init
+
+# Plan the deployment
+terraform plan
+
+# Apply the configuration
+terraform apply
+```
+
+Once the cluster is deployed, configure kubectl to connect to it:
+
+```bash
+# Save the kubeconfig to a file
+terraform output -raw kube_config > ~/.kube/config-aks
+
+# Set the KUBECONFIG environment variable
+export KUBECONFIG=~/.kube/config-aks
+
+# Verify the connection
+kubectl get nodes
+```
+
+> **Note**: In a production environment, you would include additional configuration for networking, monitoring, and security. The above example is simplified for clarity.
+
+## Helm for Application Packaging
+
+Helm is a package manager for Kubernetes that allows you to define, install, and upgrade applications using "charts". A Helm chart is a collection of files that describe a related set of Kubernetes resources.
+
+### Installing Helm
+
+```bash
+# macOS (using Homebrew)
+brew install helm
+
+# Windows (using Chocolatey)
+choco install kubernetes-helm
+
+# Linux
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+
+### Creating a Helm Chart for Our Application
+
+Let's create a Helm chart for our `k8s-web-hello` application:
+
+```bash
+helm create k8s-web-hello
+```
+
+This command creates a directory structure with template files. Let's modify these files to fit our application:
+
+1. Edit `k8s-web-hello/values.yaml` to set default values:
+
+```yaml
+replicaCount: 3
+
+image:
+  repository: andlocker/k8s-web-hello
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+configMap:
+  greeting: "Hello from ConfigMap!"
+  log_level: "info"
+```
+
+2. The templates directory already contains the Kubernetes resource definitions, but you may need to adjust them to match our application's needs.
+
+### Installing the Helm Chart
+
+Once your chart is ready, you can install it:
+
+```bash
+helm install web-app ./k8s-web-hello
+```
+
+Verify the installation:
+
+```bash
+helm list
+kubectl get all
+```
+
+### Upgrading the Helm Chart
+
+To update your application, modify the values or templates, and upgrade the release:
+
+```bash
+# Update the version in values.yaml
+helm upgrade web-app ./k8s-web-hello
+```
+
+### Rolling Back a Helm Release
+
+If an upgrade causes issues, you can easily roll back:
+
+```bash
+# List the revision history
+helm history web-app
+
+# Roll back to a specific revision
+helm rollback web-app 1
+```
+
+## CI/CD Integration
+
+Modern development workflows automate the build, test, and deployment processes using CI/CD pipelines. Let's look at how to integrate Kubernetes deployments into a CI/CD pipeline using GitHub Actions.
+
+### Setting Up a GitHub Actions Workflow
+
+Create a file at `.github/workflows/deploy.yml` in your repository:
+
+```yaml
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  ACR_REGISTRY: myacr.azurecr.io
+  IMAGE_NAME: k8s-web-hello
+  AKS_CLUSTER: my-aks-cluster
+  AKS_RESOURCE_GROUP: my-aks-rg
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    
+    - name: Login to ACR
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.ACR_REGISTRY }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+    
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+    
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+    
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+    
+    - name: Set AKS context
+      uses: azure/aks-set-context@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        resource-group: ${{ env.AKS_RESOURCE_GROUP }}
+        cluster-name: ${{ env.AKS_CLUSTER }}
+    
+    - name: Deploy to AKS
+      run: |
+        # Update the image tag in the Helm values file
+        sed -i "s|tag:.*|tag: ${{ github.sha }}|" ./k8s-web-hello/values.yaml
+        
+        # Install or upgrade the Helm chart
+        helm upgrade --install web-app ./k8s-web-hello
+```
+
+This workflow:
+1. Builds a Docker image from your application code
+2. Pushes the image to Azure Container Registry (ACR)
+3. Updates the Helm chart with the new image tag
+4. Deploys the updated Helm chart to AKS
+
+To use this workflow, you'll need to set up the following secrets in your GitHub repository:
+- `ACR_USERNAME` and `ACR_PASSWORD`: Credentials for your Azure Container Registry
+- `AZURE_CREDENTIALS`: Service principal credentials for Azure
+
+## GitOps Approaches
+
+GitOps is an operational framework that applies DevOps best practices to infrastructure automation. In a GitOps model, the desired state of your infrastructure is stored in Git, and automated processes ensure the actual state matches the desired state.
+
+### Flux CD
+
+Flux is a tool that ensures Kubernetes clusters are configured per the manifests stored in Git repositories. Here's how to set up Flux:
+
+1. Install the Flux CLI:
+
+```bash
+# macOS
+brew install fluxcd/tap/flux
+
+# Other platforms
+curl -s https://fluxcd.io/install.sh | bash
+```
+
+2. Check if your cluster is ready for Flux:
+
+```bash
+flux check --pre
+```
+
+3. Bootstrap Flux on your cluster:
+
+```bash
+flux bootstrap github \
+  --owner=your-github-username \
+  --repository=your-repo-name \
+  --path=clusters/my-cluster \
+  --personal
+```
+
+This will:
+- Create a repository if it doesn't exist
+- Add Flux components to your cluster
+- Configure Flux to sync the specified path
+
+4. Create a simple application deployment:
+
+```bash
+# Create a directory for your application
+mkdir -p clusters/my-cluster/apps/web-app
+
+# Create a kustomization.yaml file
+cat > clusters/my-cluster/apps/web-app/kustomization.yaml << EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: web-app-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: k8s-web-hello
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 3000
+```
+
+This NetworkPolicy only allows pods with the label `app: frontend` to communicate with our `k8s-web-hello` pods on port 3000.
+
+Apply the NetworkPolicy:
+
+```bash
+kubectl apply -f network-policy.yaml
+```
+
+### Role-Based Access Control (RBAC)
+
+RBAC controls who can access the Kubernetes API and what actions they can perform. Create a file named `rbac.yaml`:
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-service-account
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: app-role
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-role-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: app-service-account
+  namespace: default
+roleRef:
+  kind: Role
+  name: app-role
+  apiGroup: rbac.authorization.k8s.io
+```
+
+This RBAC configuration:
+1. Creates a service account for your application
+2. Creates a role that allows reading pods and services
+3. Binds the role to the service account
+
+Apply the RBAC configuration:
+
+```bash
+kubectl apply -f rbac.yaml
+```
+
+Update your deployment to use the service account:
+
+```yaml
+spec:
+  template:
+    spec:
+      serviceAccountName: app-service-account
+      containers:
+      # ...
+```
+
+### Pod Security Context
+
+Add security context to your pod specification to enhance security:
+
+```yaml
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: k8s-web-hello
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+```
+
+These settings:
+1. Run the container as a non-root user
+2. Prevent privilege escalation
+3. Make the root filesystem read-only
+4. Drop all Linux capabilities
+
+## Chaos Engineering for Resilience
+
+Chaos engineering involves deliberately injecting failures into your system to test its resilience. Let's create a simple chaos engineering tool to randomly delete pods.
+
+Create a file named `keasmonkey.sh`:
+
+```bash
+#!/bin/bash
+
+while true
+do
+    echo "Choosing a pod to kill..."
+
+    PODS=$(kubectl get pods -l app=k8s-web-hello | grep -v NAME | awk '{print $1}')
+    POD_COUNT=$(kubectl get pods -l app=k8s-web-hello | grep -v NAME | wc -l)
+
+    if [ "$POD_COUNT" -eq 0 ]; then
+        echo "No pods found. Exiting loop."
+        break
+    fi
+
+    K=$(( (RANDOM % POD_COUNT) + 1))
+
+    TARGET_POD=$(kubectl get pods -l app=k8s-web-hello | grep -v NAME | awk '{print $1}' | head -n ${K} | tail -n 1)
+
+    echo "Killing pod $TARGET_POD"
+    kubectl delete pod $TARGET_POD
+
+    sleep 60
+done
+```
+
+Make the script executable and run it:
+
+```bash
+chmod +x keasmonkey.sh
+./keasmonkey.sh
+```
+
+This script will randomly delete one of your application pods every minute. Observe how Kubernetes automatically recreates the pods to maintain the desired replica count.
+
+For more sophisticated chaos testing, consider using tools like:
+- Chaos Mesh
+- Litmus Chaos
+- Gremlin
+
+## Defining Service Level Objectives
+
+Service Level Objectives (SLOs) define the target level of reliability for your service. Let's define some SLOs for our application:
+
+1. **Availability**: 99.9% uptime measured over 30 days
+2. **Latency**: 95% of requests complete in less than 200ms
+3. **Error Rate**: Less than 0.1% of requests result in 5xx errors
+
+To monitor these SLOs, set up Prometheus recording rules:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-slos
+  namespace: monitoring
+data:
+  slos.yml: |
+    groups:
+    - name: slos
+      rules:
+      - record: slo:availability:ratio
+        expr: sum(rate(http_requests_total{job="k8s-web-hello",code!~"5.."}[5m])) / sum(rate(http_requests_total{job="k8s-web-hello"}[5m]))
+      - record: slo:latency:ratio
+        expr: sum(rate(http_request_duration_seconds_bucket{job="k8s-web-hello",le="0.2"}[5m])) / sum(rate(http_request_duration_seconds_count{job="k8s-web-hello"}[5m]))
+      - record: slo:error:ratio
+        expr: sum(rate(http_requests_total{job="k8s-web-hello",code=~"5.."}[5m])) / sum(rate(http_requests_total{job="k8s-web-hello"}[5m]))
+```
+
+Create a Grafana dashboard to visualize these SLOs and track your error budget over time.
+
+## Summary
+
+Congratulations! You've now covered the advanced professional concepts needed to run Kubernetes in production. In this stage, you've learned:
+
+1. How to provision and manage a managed Kubernetes service (AKS)
+2. How to package applications using Helm for easier deployment and upgrades
+3. How to implement CI/CD pipelines for automated deployments
+4. How to use GitOps approaches for declarative infrastructure management
+5. How to set up monitoring, alerting, and logging for observability
+6. How to secure external access to your applications using Ingress controllers
+7. How to implement security measures including network policies and RBAC
+8. How to test resilience using chaos engineering
+9. How to define and monitor Service Level Objectives
+
+These advanced concepts represent industry best practices for running reliable, secure, and observable Kubernetes applications in production environments.
+
+Key takeaways:
+- Use managed Kubernetes services for reduced operational overhead
+- Implement proper CI/CD and GitOps for automation and consistency
+- Ensure observability through comprehensive monitoring and logging
+- Secure your applications with network policies, RBAC, and secure contexts
+- Test resilience proactively through chaos engineering
+- Define and track SLOs to maintain reliability
+
+Remember that production-grade Kubernetes requires careful planning and continuous improvement. Start with what you need, and gradually adopt more advanced patterns as your requirements evolve.
+
+---
+
+[<- Back: Configuration, Health & Storage](./03-configuration-health-storage.md) | [Next: Main Note ->](./README.md) kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - service.yaml
+EOF
+
+# Create a deployment.yaml file
+cat > clusters/my-cluster/apps/web-app/deployment.yaml << EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-web-hello
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello
+    spec:
+      containers:
+      - name: k8s-web-hello
+        image: andlocker/k8s-web-hello:latest
+        ports:
+        - containerPort: 3000
+EOF
+
+# Create a service.yaml file
+cat > clusters/my-cluster/apps/web-app/service.yaml << EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-hello
+spec:
+  selector:
+    app: k8s-web-hello
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP
+EOF
+
+# Commit and push the changes
+git add .
+git commit -m "Add web-app manifests"
+git push
+```
+
+Flux will automatically detect the changes in your Git repository and apply them to your cluster.
+
+## Monitoring and Alerting
+
+Monitoring is essential for understanding the health and performance of your Kubernetes cluster and applications. Let's set up Prometheus and Grafana for monitoring.
+
+### Installing Prometheus and Grafana Using Helm
+
+```bash
+# Add the Prometheus community Helm repository
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# Create a namespace for monitoring
+kubectl create namespace monitoring
+
+# Install Prometheus
+helm install prometheus prometheus-community/prometheus \
+  --namespace monitoring
+
+# Install Grafana
+helm repo add grafana https://grafana.github.io/helm-charts
+helm install grafana grafana/grafana \
+  --namespace monitoring \
+  --set persistence.enabled=true \
+  --set adminPassword=admin
+```
+
+### Accessing Grafana
+
+```bash
+# Get the Grafana password
+kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+# Port-forward to access Grafana
+kubectl port-forward --namespace monitoring svc/grafana 3000:80
+```
+
+Open your browser to http://localhost:3000 and log in with username `admin` and the password retrieved above.
+
+### Setting Up Dashboards
+
+In Grafana:
+1. Go to Configuration > Data Sources
+2. Add Prometheus as a data source (URL: http://prometheus-server)
+3. Import dashboards from the Grafana Dashboard catalog:
+   - Kubernetes Cluster Overview (dashboard ID: 10856)
+   - Node Exporter Full (dashboard ID: 1860)
+
+### Creating Alerts
+
+In Prometheus:
+1. Define alerting rules in a ConfigMap:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alerts
+  namespace: monitoring
+data:
+  alerts.yml: |
+    groups:
+    - name: k8s-web-hello
+      rules:
+      - alert: HighErrorRate
+        expr: sum(rate(http_requests_total{job="k8s-web-hello",code=~"5.."}[5m])) / sum(rate(http_requests_total{job="k8s-web-hello"}[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate on k8s-web-hello"
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+```
+
+2. Apply the ConfigMap and configure Prometheus to use it.
+
+## Logging and Observability
+
+Centralized logging is crucial for troubleshooting issues in distributed systems. Let's set up the Elastic Stack (Elasticsearch, Filebeat, Kibana) for logging.
+
+### Installing the Elastic Stack Using Helm
+
+```bash
+# Add the Elastic Helm repository
+helm repo add elastic https://helm.elastic.co
+helm repo update
+
+# Create a namespace for logging
+kubectl create namespace logging
+
+# Install Elasticsearch
+helm install elasticsearch elastic/elasticsearch \
+  --namespace logging \
+  --set replicas=1 \
+  --set minimumMasterNodes=1 \
+  --set resources.requests.cpu="100m" \
+  --set resources.requests.memory="1Gi" \
+  --set resources.limits.cpu="1000m" \
+  --set resources.limits.memory="2Gi"
+
+# Install Kibana
+helm install kibana elastic/kibana \
+  --namespace logging \
+  --set elasticsearchHosts=http://elasticsearch-master:9200
+
+# Install Filebeat
+helm install filebeat elastic/filebeat \
+  --namespace logging \
+  --set elasticsearchHosts=http://elasticsearch-master:9200
+```
+
+### Accessing Kibana
+
+```bash
+# Port-forward to access Kibana
+kubectl port-forward --namespace logging svc/kibana-kibana 5601:5601
+```
+
+Open your browser to http://localhost:5601 to access Kibana.
+
+### Setting Up Log Collection
+
+Filebeat automatically collects container logs from your Kubernetes cluster. In Kibana:
+1. Go to Management > Stack Management > Index Patterns
+2. Create an index pattern for `filebeat-*`
+3. Navigate to Discover to view logs
+
+## Ingress and External Access
+
+In production, you'll want to expose your applications to the internet using Ingress controllers, which provide HTTP/HTTPS routing, SSL termination, and more.
+
+### Installing Nginx Ingress Controller
+
+```bash
+# Add the Ingress Nginx Helm repository
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+# Install the Ingress Nginx controller
+helm install nginx-ingress ingress-nginx/ingress-nginx
+```
+
+### Creating an Ingress Resource
+
+Create a file named `ingress.yaml`:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-web-hello
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: hello.example.com  # Replace with your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: k8s-web-hello
+            port:
+              number: 3000
+```
+
+Apply the Ingress resource:
+
+```bash
+kubectl apply -f ingress.yaml
+```
+
+Configure DNS to point your domain (e.g., hello.example.com) to the external IP of the Ingress controller:
+
+```bash
+kubectl get service nginx-ingress-ingress-nginx-controller
+```
+
+### Adding SSL/TLS
+
+To enable HTTPS, add a TLS section to your Ingress resource:
+
+```yaml
+spec:
+  tls:
+  - hosts:
+    - hello.example.com
+    secretName: hello-tls
+  rules:
+  # ...
+```
+
+Create a TLS secret with your certificate:
+
+```bash
+kubectl create secret tls hello-tls \
+  --key /path/to/private.key \
+  --cert /path/to/certificate.crt
+```
+
+Alternatively, you can use cert-manager to automatically manage SSL certificates.
+
+## Implementing Security Measures
+
+Security is a critical concern in production Kubernetes environments. Let's explore some security measures:
+
+### Network Policies
+
+Network Policies control the traffic flow between pods. Create a file named `network-policy.yaml`:
+
+```yaml
+apiVersion:</textarea>
+
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>
+    const slideshow = remark.create({
+        source: document.getElementById('source').value,
+        highlightStyle: 'monokai',
+    });
+</script>
+</body>
+</html>

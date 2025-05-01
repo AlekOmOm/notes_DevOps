@@ -116,6 +116,8 @@ Adding more machines to distribute the load:
 - May increase licensing costs (per-instance licenses)
 - Requires load balancing and orchestration
 
+![Vertical vs Horizontal Scaling](./assets_orchestration/vertical_horizontal_scaling.png)
+
 ### Comparison
 
 | Aspect | Vertical Scaling | Horizontal Scaling |
@@ -130,6 +132,8 @@ Adding more machines to distribute the load:
 ## Load Balancing
 
 Load balancing distributes network traffic across multiple servers to ensure no single server bears too much demand. This improves response times and prevents any single server from becoming a bottleneck.
+
+![Azure Load Balancer](./assets_orchestration/azure_load_balancer.png)
 
 ### Types of Load Balancers
 
@@ -182,6 +186,8 @@ upstream backend {
     server backup.example.com backup;
 }
 ```
+
+![Load Balancing with Keep Alive](./assets_orchestration/load_balancing_keep_alive.gif)
 
 ## High Availability Design
 

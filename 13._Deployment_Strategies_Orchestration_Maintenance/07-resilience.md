@@ -76,6 +76,13 @@ Netflix pioneered Chaos Engineering with their "Simian Army" suite of tools:
 
 The Chaos Monkey tool is available as open source: [GitHub - Netflix/chaosmonkey](https://github.com/Netflix/chaosmonkey)
 
+https://netflixtechblog.com/the-netflix-simian-army-16e57fbab116
+
+https://netflix.github.io/chaosmonkey/
+
+<img src="./assets_resilience/chaosmonkey_logo.png" alt="chaosmonkey logo">
+
+
 ### KubeInvaders
 
 KubeInvaders is a gamified chaos engineering tool for Kubernetes:

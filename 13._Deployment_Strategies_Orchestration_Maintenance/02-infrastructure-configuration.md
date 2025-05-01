@@ -23,6 +23,11 @@ Infrastructure and configuration management represent the foundation of modern D
 
 Platform engineering is the discipline of designing and building toolchains and workflows that enable self-service capabilities for software engineering organizations. The goal is to create a developer platform that makes it easy for development teams to provision environments, deploy applications, and access operational capabilities without requiring specialized infrastructure knowledge.
 
+<img src="./assets_maintenance/platform_engineering_devops8.png" alt="platform engineering devops8">
+
+[Source - Microsoft: What is Platform Engineering?](https://learn.microsoft.com/en-us/platform-engineering/what-is-platform-engineering)
+
+
 ### Key Benefits
 
 - **Reduced Operational Bottlenecks**: Developers can provision resources without waiting for operations teams
@@ -74,6 +79,13 @@ A fundamental shift in infrastructure management is captured by the "cattle vs. 
 > "In the old way of doing things, we treated our servers like pets: we gave them names, and when they got sick, we nursed them back to health. In the new way, servers are treated like cattle: they're numbered, and when they get sick, you replace them."
 > 
 > — Bill Baker, Microsoft
+
+
+[CERN agrees with Cattle rather than pets (slide 17)](https://www.slideshare.net/slideshow/cern-data-centre-evolution/15246440#9)
+
+<img src="./assets_deployment_strategies/cern_slide_pets_vs_cattle.png" style="height: 28vh;" alt="cern slide pets vs cattle">
+
+
 
 ### Pets Approach (Traditional)
 
@@ -137,6 +149,10 @@ resource "aws_instance" "web" {
 ## Immutable Infrastructure
 
 Immutable infrastructure takes the cattle philosophy to its logical conclusion: instead of updating servers in place, you replace them entirely when changes are needed.
+
+<img src="./assets_deployment_strategies/mutable_immutable_architecture.png" alt="mutable immutable architecture" style="height: 40vh;">
+
+[Source](https://www.opsramp.com/guides/why-kubernetes/infrastructure-as-code/)
 
 ### Key Principles
 

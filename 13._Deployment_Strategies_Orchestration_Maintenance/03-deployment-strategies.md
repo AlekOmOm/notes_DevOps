@@ -80,6 +80,8 @@ The simplest deployment strategy involves replacing the entire application at on
 
 Blue-Green deployment uses two identical environments, only one of which serves production traffic at any time.
 
+![Blue-Green Deployment](./assets_deployment_strategies/blue-green_deployment.gif)
+
 ### How It Works
 
 1. Start with "Blue" environment serving production traffic
@@ -117,6 +119,8 @@ Database changes add complexity to blue-green deployments. Two common approaches
    - Advantages: No data duplication, simpler data consistency
    - Disadvantages: More complex deployment planning, careful schema versioning required
 
+![Blue-Green Deployment with Database](./assets_deployment_strategies/blue-green_deployment_with_database.png)
+
 ### Advantages
 
 - Zero downtime deployments
@@ -140,6 +144,8 @@ Database changes add complexity to blue-green deployments. Two common approaches
 
 Canary deployment gradually rolls out changes to a subset of users before deploying to the entire infrastructure.
 
+![Canary Deployment](./assets_deployment_strategies/canary_deployment.gif)
+
 ### How It Works
 
 1. Deploy the new version to a small subset of servers (e.g., 5-10%)
@@ -147,6 +153,8 @@ Canary deployment gradually rolls out changes to a subset of users before deploy
 3. Monitor performance, errors, and user feedback
 4. Gradually increase traffic to the new version if no issues are detected
 5. If problems occur, rollback by redirecting all traffic to the old version
+
+![Canary Mining Reference](./assets_deployment_strategies/canary_mine.png)
 
 ```javascript
 // Example of canary configuration in Nginx
@@ -187,6 +195,8 @@ server {
 
 Rolling updates deploy the new version incrementally across the infrastructure, updating servers one by one or in small batches.
 
+![Rolling Updates](./assets_deployment_strategies/rolling_updates.gif)
+
 ### How It Works
 
 1. Take a subset of servers out of rotation (often one at a time)
@@ -203,6 +213,8 @@ A variation called "ramped deployment" increases the percentage more aggressivel
 - Finally update 100%
 
 This accelerates deployment while still limiting risk compared to big bang deployment.
+
+![Ramped Deployment (Rolling Deployment)](./assets_deployment_strategies/ramped_deployment_rolling_deployment.gif)
 
 ### Advantages
 
@@ -227,6 +239,8 @@ This accelerates deployment while still limiting risk compared to big bang deplo
 ## Shadow Deployment
 
 Shadow deployment (also called "dark launching") runs the new version in parallel with the production version, but only the current production version serves real user traffic.
+
+![Shadow Deployment](./assets_deployment_strategies/shadow_deployment_API.gif)
 
 ### How It Works
 
@@ -300,6 +314,12 @@ Facebook employs a sophisticated deployment approach:
 3. **Full Deployment**: Finally, changes roll out to all production servers
 
 Facebook Gatekeeper, an internal tool, manages this process and can target releases to specific demographic groups or regions.
+
+### A/B Testing
+
+While not strictly a deployment strategy, A/B testing is often used alongside deployment strategies to test feature variations with real users.
+
+![A/B Testing](./assets_deployment_strategies/ab_testing.gif)
 
 ### Other Notable Tools
 

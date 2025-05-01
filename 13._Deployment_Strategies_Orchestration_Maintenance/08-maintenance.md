@@ -16,6 +16,8 @@
 
 While creating software gets most of the attention in education and industry discussion, the majority of an application's lifecycle is spent in maintenance mode. Maintenance encompasses all activities required to keep a system operational, relevant, and effective after its initial deployment—often lasting years or even decades.
 
+![Platform Engineering and DevOps](./assets_maintenance/platform_engineering_devops8.png)
+
 This section focuses on the critical but often overlooked aspects of system maintenance, exploring how to design for maintainability, establish clear service expectations, and implement effective maintenance processes.
 
 ## The Scope of Maintenance
@@ -142,6 +144,8 @@ Service Level Agreements (SLAs), Service Level Objectives (SLOs), and Service Le
 
 ### Key Definitions
 
+![SLA, SLO, SLI Definitions](./assets_maintenance/sla_slo_sli_definitions.png)
+
 - **SLI (Service Level Indicator)**: A metric that measures a specific aspect of service level
   - Example: Error rate, latency, throughput, availability percentage
 
@@ -152,6 +156,8 @@ Service Level Agreements (SLAs), Service Level Objectives (SLOs), and Service Le
   - Example: Financial penalties, service credits, termination rights
 
 ### SLA Template Structure
+
+![SLA, SLI, SLO Templates](./assets_maintenance/sla_sli_sli_templates.png)
 
 A typical SLA includes:
 

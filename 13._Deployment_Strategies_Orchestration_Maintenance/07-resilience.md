@@ -21,7 +21,7 @@ This section explores how to build and verify system robustness against failures
 
 ## Chaos Engineering
 
-Chaos Engineering is the discipline of experimenting on a system to build confidence in its capability to withstand turbulent conditions in production.
+*"Chaos Engineering is the discipline of experimenting on a system to build confidence in its capability to withstand turbulent conditions in production."* - wikipedia
 
 ### Core Principles
 
@@ -337,4 +337,4 @@ Remember that resilience testing should be approached carefully, with clear obje
 
 ---
 
-[<- Back: Kubernetes](./05-kubernetes.md) | [Next: Maintenance Best Practices ->](./07-maintenance.md)
+[<- Back: Kubernetes](./05-kubernetes.md) | [Next: Maintenance Best Practices ->](./08-maintenance.md)

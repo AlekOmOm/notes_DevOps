@@ -189,6 +189,9 @@ upstream backend {
 
 ![Load Balancing with Keep Alive](./assets_orchestration/load_balancing_keep_alive.gif)
 
+[Source: Digital Ocean](https://www.digitalocean.com/community/tutorial-collections/how-to-create-a-high-availability-setup-with-heartbeat-and-reserved-ips) // TODO: update with proper Anders' link
+
+
 ## High Availability Design
 
 High Availability (HA) refers to systems designed to operate continuously without failure for a long time. The goal is to avoid single points of failure and provide reliable service despite hardware or software issues.

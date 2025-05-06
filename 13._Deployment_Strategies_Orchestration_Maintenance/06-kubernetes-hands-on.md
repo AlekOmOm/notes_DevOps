@@ -38,8 +38,15 @@ brew install kubectl minikube
 
 Using Chocolatey:
 
-```powershell
+```Powershell
 choco install kubernetes-cli minikube
+```
+
+#### Linux
+
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
 
 ### Starting Minikube
@@ -97,6 +104,8 @@ This will show the containers running within the Minikube VM, including the Kube
 ## Basic Kubernetes Operations
 
 Now that Minikube is running, let's explore basic operations using `kubectl`.
+
+[alias powershell](#kubectl-powershell-alias)
 
 ### Exploring the Cluster
 
@@ -490,6 +499,17 @@ In this hands-on section, you've learned how to:
 6. Use Helm as a package manager for Kubernetes
 
 These skills provide a foundation for working with Kubernetes in more complex scenarios. As you become more comfortable with these basics, you can explore advanced topics like StatefulSets, ConfigMaps, Secrets, Ingress, and more.
+
+
+## footnotes
+
+### kubectl-powershell-alias
+
+in .profile add
+```powershell
+if (!(Test-Path -Path $PROFILE)) { New-Item -ItemType File -Path $PROFILE -Force }
+Add-Content -Path $PROFILE -Value 'Set-Alias -Name k -Value kubectl'
+```
 
 ---
 

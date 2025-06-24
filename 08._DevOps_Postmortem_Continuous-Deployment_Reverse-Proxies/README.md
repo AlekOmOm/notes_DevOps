@@ -42,6 +42,14 @@ This collection provides comprehensive coverage of DevOps principles, postmortem
    - Quality gates and rollback strategies
    - Integration examples
 
+## Personal Reflection
+
+7. **[Our DevOps Journey](./our-devops-journey.md)** 🚀
+   - Evolution from technical → system → people focus
+   - Real team experiences with Andon cord implementation
+   - Lessons learned about sustainable DevOps culture
+   - The transformation from doing DevOps to being DevOps
+
 ---
 
-*(These notes synthesize KEA DevOps course material with practical implementation patterns for comprehensive understanding.)*
+*(These notes synthesize KEA DevOps course material with practical implementation patterns and personal team experiences for comprehensive understanding.)*

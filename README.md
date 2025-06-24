@@ -1,3 +1,5 @@
+[9._DevSecOps](https://github.com/AlekOmOm/notes_DevOps/blob/main/09._DevSecOps__Testing_Security%2FREADME.md)
+
 
 [10._Databases_ORM_Data_scraping_Web_crawling](https://github.com/AlekOmOm/notes_DevOps/blob/daf793c3c0a6038c1b4b5c4081243d3bee4e6628/10._Databases_ORM_Data_scraping_Web_crawling/README.md)
 

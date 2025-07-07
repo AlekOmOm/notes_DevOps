@@ -1,6 +1,6 @@
 # 02a. Prometheus and Grafana 📈
 
-[<- Back to Monitoring](./02-Monitoring.md) | [Next Sub-Topic: Cloud Monitoring ->](./02b-Cloud-Monitoring-Solutions.md)
+[<- Back to Monitoring](./02-Monitoring.md) | [Next Sub-Topic: Alert Manager ->](./02b-AlertManager.md)
 
 ## Overview
 

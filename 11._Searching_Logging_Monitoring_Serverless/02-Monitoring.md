@@ -2,7 +2,11 @@
 
 [<- Back to Logging](./01-Logging.md) | [Next: Searching ->](./03-Searching.md)
 
-## Table of Contents
+sub-notes
+- [02a. Prometheus and Grafana](./02a-Prometheus-and-Grafana.md)
+- [02b. Alert Manager of Prometheus](./02b-AlertManager.md.md)
+
+## Table of Contents of file
 
 - [Introduction](#introduction)
 - [Monitoring vs. Related Concepts](#monitoring-vs-related-concepts)
@@ -199,7 +203,7 @@ Dan North captures this sentiment well: "When deciding whether a message should 
 
 For more detailed implementation specifics, see:
 - [02a. Prometheus and Grafana](./02a-Prometheus-and-Grafana.md)
-- [02b. Cloud Monitoring Solutions](./02b-Cloud-Monitoring-Solutions.md)
+- [02b. Alert Manager of Prometheus](./02b-AlertManager.md.md)
 
 ---
 

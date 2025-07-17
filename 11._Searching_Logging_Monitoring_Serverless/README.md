@@ -31,7 +31,7 @@ This collection of notes provides a comprehensive guide to modern backend infras
    - Implementing efficient crawlers
    - Where and how to run crawlers
 
-5. **[Serverless Functions](./05-Serverless-Functions.md)** ⚡
+5. **[Serverless Functions](./05-Serverless.md)** ⚡
    - Serverless computing concepts
    - Benefits and limitations
    - Deployment models
